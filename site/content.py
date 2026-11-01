@@ -61,7 +61,9 @@ def supply_pages():
                     'Supplies for a reading space',
                     '<p>For setting up a reading space of your own: cloths and card stands for the table, bags and boxes for your deck, journals, '
                     'singing bowls and bells, and sage and sprays for clearing a room.</p>', p_intro, crumb_label='Supplies',
-                    feature_kinds=('cloth', 'box', 'bowl', 'bag'))
+                    feature_kinds=('cloth', 'box', 'bowl', 'bag'), feat_h='From each shelf',
+                    note='Collect what you need in the cart, then pay in one go on the secure Namaste Bookshop checkout; the bookshop packs and mails it.',
+                    search=('Search supplies', 'For example: velvet bag, singing bowl, white sage or tingsha.'))
 
 LINES = {
  'rebecca-martinez': 'Clairaudient tarot in English or Spanish, paced to whatever you bring in.',
@@ -198,7 +200,7 @@ def pages():
     G.add('/visit/', 'Visit: Address, Hours & Transit | Psychic Center of New York',
           'Find Psychic Center of New York: ground-floor tables at 2 W 14th St and private rooms at 80 Fifth Ave Suite 1104, opening hours, subway and check-in tips.', vi,
           crumbs=[('Home', '/'), ('Visit', '/visit/')])
-    fq = [('Why are the ground-floor tables inside a bookshop?', 'Our downstairs tables are set up inside Namaste Bookshop, which shares an owner with the center. The private rooms are upstairs in Suite 1104.'),
+    fq = [('Why are the ground-floor tables inside a bookshop?', 'Our downstairs tables are set up inside Namaste Bookshop, and the center and the shop have the same owner. The private rooms are upstairs in Suite 1104.'),
           ('Can I choose which room I sit in?', 'Rooms follow the reader. If you want a private room, book a reader who works upstairs.'),
           ('Are the rooms private?', 'The Suite 1104 rooms are closed rooms. The ground-floor tables are inside the open shop.'),
           ('Do you offer Reiki?', 'Short energy-cleansing sessions are offered now. Ask us about other energy work, because practitioner availability changes.'),

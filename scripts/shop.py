@@ -172,7 +172,7 @@ def toolbar(items, kinds, slug):
     sel = lambda name, label, opts: (f'<label class="fl"><span>{label}</span><select name="{name}" data-f="{name}"><option value="">All</option>'
                                       + ''.join(f'<option value="{E(v)}">{E(t)}</option>' for v, t in opts) + '</select></label>')
     h = (f'<form class="tools" data-shelf="{E(slug)}" aria-label="Sort and filter" onsubmit="return false">'
-         f'<label class="fl fq"><span>Search this shelf</span><input type="search" data-f="q" placeholder="Title, author or publisher" autocomplete="off"></label>'
+         f'<label class="fl fq"><span>Search this shelf</span><input type="search" data-f="q" placeholder="Name or maker" autocomplete="off"></label>'
          f'<label class="fl"><span>Sort</span><select name="sort" data-f="sort"><option value="">Featured</option><option value="new">Newest</option>'
          f'<option value="lo">Price, low to high</option><option value="hi">Price, high to low</option><option value="az">A to Z</option></select></label>')
     h += '<details class="tf" data-tf><summary>Filter</summary><div class="tfi">'
@@ -210,12 +210,12 @@ def shelf(path, slug, cat, title, desc, h1, intro, items, kinds, crumbs, after='
         G.add(url, t, desc if n == 1 else f'{desc.rstrip(".")}. Page {n} of {pages}.', body,
               ld=[G.product_ld_items(chunk, ld_name or h1)] if chunk else [], crumbs=crumbs + ([(f'Page {n}', url)] if n > 1 else []))
 SHELF_JSON = {}
-def search_page(shop_path='/shop/', crumbs=None):
-    body = ('<section class="shop"><div class="shead"><h1>Search the shop</h1><p>Type part of a title, author or publisher.</p></div>'
+def search_page(shop_path='/shop/', crumbs=None, intro=None):
+    body = (f'<section class="shop"><div class="shead"><h1>Search</h1><p>{intro or "Type a few letters of what you want."}</p></div>'
             '<form class="tools srch" role="search" onsubmit="return false"><label class="fl fq"><span>Search</span><input type="search" id="sq" data-sq placeholder="e.g. Rider-Waite, pendulum, Lenormand" autocomplete="off" autofocus></label>'
             '<p class="cnt" data-scount aria-live="polite"></p></form><ul class="grid" data-sgrid></ul>'
-            f'<p class="small"><a href="{shop_path}">Browse every shelf instead</a></p></section>')
-    G.add('/search/', f'Search | {G.BRAND}', f'Search everything on the {G.BRAND} shelves.', body, robots='noindex', sitemap=False,
+            f'<p class="small"><a href="{shop_path}">Back to the shelves</a></p></section>')
+    G.add('/search/', f'Search | {G.BRAND}', f'Find a product at {G.BRAND}.', body, robots='noindex', sitemap=False,
           crumbs=crumbs or [('Home', '/'), ('Shop', shop_path), ('Search', '/search/')])
 def search_box(placeholder='Search the shop'):
     return (f'<form class="sbox" action="/search/" role="search"><label class="vh" for="sbq">{E(placeholder)}</label>'
