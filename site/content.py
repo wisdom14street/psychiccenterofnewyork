@@ -25,7 +25,7 @@ LINES = {
  'high-priestess-judith': 'La Gitana: tarot, astrology and mediumship, with love as her specialty.',
  'damon-stang': 'Master tarot and folk magic, a professional reader for over a quarter century.',
  'jennifer-shanteau': 'Certified hypnotherapist; past-life and higher-self sessions, plus a short energy cleansing.',
- 'dainichi-lazuli': 'Tarot, Vedic astrology, runes, numerology and aura reading, billed by the quarter hour.',
+ 'dainichi-lazuli': 'Tarot, Vedic astrology, runes, numerology and aura reading, billed in 15-minute blocks.',
  'mallika': 'Lenormand for the facts and tarot for the reasons, with a push toward action.',
  'alexander-d-santiago': 'Tarot, or Western and Vedic chart work with gemstone and flower-essence suggestions.',
  'andrea-dopewitchkira': 'Clairvoyant tarot and longer Witch Talk conversations.',
