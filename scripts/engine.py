@@ -167,6 +167,19 @@ def ga_head():
     cfg = json.dumps({'site_brand': BRAND}).replace('</', '<\\/')
     return (f'<script async src="https://www.googletagmanager.com/gtag/js?id={GA_ID}"></script>'
             f'<script>window.dataLayer=window.dataLayer||[];function gtag(){{dataLayer.push(arguments);}}gtag("js",new Date());gtag("config","{GA_ID}",{cfg});</script>')
+_FH = None
+def fonts_head():
+    """Self-hosted fonts (static/fonts/, made by selfhost_fonts.py) are inlined with preloads; otherwise fall back to Google Fonts."""
+    global _FH
+    if _FH is None:
+        fc = os.path.join(ROOT, 'static', 'fonts', 'fonts.css')
+        if os.path.exists(fc):
+            pre = [l.strip() for l in open(os.path.join(ROOT, 'static', 'fonts', 'preload.txt')) if l.strip()]
+            _FH = (''.join(f'<link rel="preload" href="/fonts/{n}" as="font" type="font/woff2" crossorigin>' for n in pre)
+                   + '<style>' + re.sub(r'\s+', ' ', open(fc).read()) + '</style>')
+        else:
+            _FH = (f'<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="{C.FONTS}">')
+    return _FH
 def render(pg):
     canon = SITE + urllib.parse.quote(pg['path'])
     ld = [org_ld()] + pg['ld']
@@ -180,7 +193,7 @@ def render(pg):
             f'<meta property="og:description" content="{E(pg["desc"])}"><meta property="og:url" content="{canon}"><meta property="og:image" content="{SITE}{pg["ogimg"]}">'
             f'<meta property="og:image:width" content="1200"><meta property="og:image:height" content="630"><meta name="twitter:card" content="summary_large_image">'
             f'<meta name="theme-color" content="{C.THEME_COLOR}"><link rel="icon" href="/favicon.svg" type="image/svg+xml"><link rel="apple-touch-icon" href="/apple-touch-icon.png">'
-            + (f'<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="{C.FONTS}">' if C.FONTS else '')
+            + (fonts_head() if C.FONTS else '')
             + ('<link rel="stylesheet" href="/assets/cart.css"><link rel="stylesheet" href="/assets/shop.css">' if getattr(C, 'CART', False) else '') + '<link rel="stylesheet" href="/assets/site.css">' + ''.join(ldjson(x) for x in ld) + '</head>')
     body = C.shell(pg)
     tail = (cart_boot() + '<script src="/assets/shop.js" defer></script>' if getattr(C, 'CART', False) else '') + ('<script src="/assets/ga.js" defer></script>' if ga_head() else '')
