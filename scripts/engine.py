@@ -180,7 +180,7 @@ def render(pg):
             f'<meta property="og:description" content="{E(pg["desc"])}"><meta property="og:url" content="{canon}"><meta property="og:image" content="{SITE}{pg["ogimg"]}">'
             f'<meta property="og:image:width" content="1200"><meta property="og:image:height" content="630"><meta name="twitter:card" content="summary_large_image">'
             f'<meta name="theme-color" content="{C.THEME_COLOR}"><link rel="icon" href="/favicon.svg" type="image/svg+xml"><link rel="apple-touch-icon" href="/apple-touch-icon.png">'
-            + (f'<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="{C.FONTS}" media="print" onload="this.media=\'all\'"><noscript><link rel="stylesheet" href="{C.FONTS}"></noscript>' if C.FONTS else '')
+            + (f'<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="{C.FONTS}">' if C.FONTS else '')
             + ('<link rel="stylesheet" href="/assets/cart.css"><link rel="stylesheet" href="/assets/shop.css">' if getattr(C, 'CART', False) else '') + '<link rel="stylesheet" href="/assets/site.css">' + ''.join(ldjson(x) for x in ld) + '</head>')
     body = C.shell(pg)
     tail = (cart_boot() + '<script src="/assets/shop.js" defer></script>' if getattr(C, 'CART', False) else '') + ('<script src="/assets/ga.js" defer></script>' if ga_head() else '')
