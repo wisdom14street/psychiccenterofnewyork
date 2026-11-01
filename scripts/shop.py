@@ -1,7 +1,7 @@
 """Catalog + storefront presentation for the Namaste tarot sites: full-catalog fetch (public products.json, read only),
 per-site selection, clean display titles, galleries, variants, compare-at prices, sold-out handling, shelf pages with
 static pagination plus client-side sort/filter (assets/shop.js), product pages with related items and JSON-LD."""
-import json, os, re, time, math, html, urllib.request, datetime
+import json, os, re, time, math, html, urllib.request, urllib.parse, datetime
 import engine as G
 import present as PR
 E = G.E
@@ -89,6 +89,7 @@ PUBMAP = [(r'u\.?s\.? games.*', 'U.S. Games Systems'), (r'llewellyn.*', 'Llewell
           (r'blue angel.*', 'Blue Angel Publishing'), (r'red wheel.*|weiser.*', 'Red Wheel/Weiser'), (r'ag ?m(uller)?( urania)?', 'AGM-Urania'),
           (r'hay house.*', 'Hay House'), (r'harper ?collins.*', 'HarperCollins'), (r'lotus press', 'Lotus Press')]
 PUBDROP = r"namaste.*|.*bookshop.*|texasbkmn|dsgnbdk|ocnlkw|nagimpinc|bnjint|vlorg|consignments?|mps distribution.*|ingram.*|benjamin international|lotus light.*|.*collectable|"
+EMOJI = re.compile('[\U0001F000-\U0001FAFF\u2600-\u27BF\u2B50\u2B55\uFE0F\u200D]+ ?')
 def pub_clean(v):
     """Turn a Shopify vendor field into a publisher name shoppers recognise; drop distributor and internal codes."""
     v = (v or '').strip()
@@ -258,8 +259,8 @@ def sticky(x, cat):
             f'<button type="button" class="qa" {atc_attrs(x, cat)}>Add</button></div>')
 def product_page(x, cat, shelf_name, shelf_path, pool, crumbs_root, intro_html, desc_mode='strict', desc_limit=1400, desc_head='From the publisher', meta=None, extra=''):
     _cat(x, cat)
-    url = f'{G.SITE}/products/{x["h"]}/'
-    desc = PR.clean_body(x['body'], desc_mode, desc_limit, x['raw']) if desc_limit else ''
+    url = f'{G.SITE}/products/{urllib.parse.quote(x["h"])}/'
+    desc = PR.clean_body(EMOJI.sub('', x['body'] or ''), desc_mode, desc_limit, x['raw']) if desc_limit else ''
     x['_desc'] = desc
     facts = [('By', x['author']), ('Publisher', x['pub']), ('Cards', str(x['cards']) if x['cards'] else ''), ('ISBN' if x['gtin'].startswith('97') else 'Barcode', x['gtin']), ('SKU', '' if x['gtin'] else x['sku'])]
     dl = '<dl class="facts">' + ''.join(f'<dt>{a}</dt><dd>{E(b)}</dd>' for a, b in facts if b) + '</dl>'

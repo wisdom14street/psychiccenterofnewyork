@@ -43,7 +43,7 @@ def shop_ld(kind=None):
     return {'@context': 'https://schema.org', '@type': 'WebSite', '@id': SITE + '/#website', 'name': BRAND, 'url': SITE + '/', 'publisher': {'@id': SITE + '/#business'}}
 def crumbs_ld(trail):
     return {'@context': 'https://schema.org', '@type': 'BreadcrumbList', 'itemListElement': [
-        {'@type': 'ListItem', 'position': i + 1, 'name': n, 'item': SITE + p} for i, (n, p) in enumerate(trail)]}
+        {'@type': 'ListItem', 'position': i + 1, 'name': n, 'item': SITE + urllib.parse.quote(p)} for i, (n, p) in enumerate(trail)]}
 def faq_ld(qas):
     return {'@context': 'https://schema.org', '@type': 'FAQPage', 'mainEntity': [
         {'@type': 'Question', 'name': q, 'acceptedAnswer': {'@type': 'Answer', 'text': re.sub(r'<[^>]+>', '', a)}} for q, a in qas]}
@@ -168,7 +168,7 @@ def ga_head():
     return (f'<script async src="https://www.googletagmanager.com/gtag/js?id={GA_ID}"></script>'
             f'<script>window.dataLayer=window.dataLayer||[];function gtag(){{dataLayer.push(arguments);}}gtag("js",new Date());gtag("config","{GA_ID}",{cfg});</script>')
 def render(pg):
-    canon = SITE + pg['path']
+    canon = SITE + urllib.parse.quote(pg['path'])
     ld = [org_ld()] + pg['ld']
     if pg['crumbs']: ld.append(crumbs_ld(pg['crumbs']))
     head = (f'<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">'
@@ -213,12 +213,12 @@ def build():
     open(os.path.join(dist, 'CNAME'), 'w').write(DOMAIN + '\n')
     sm = ['<?xml version="1.0" encoding="UTF-8"?>', '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">']
     for pg in PAGES:
-        if pg['sitemap'] and pg['robots'] is None: sm.append(f'<url><loc>{SITE}{pg["path"]}</loc><lastmod>{TODAY}</lastmod></url>')
+        if pg['sitemap'] and pg['robots'] is None: sm.append(f'<url><loc>{SITE}{urllib.parse.quote(pg["path"])}</loc><lastmod>{TODAY}</lastmod></url>')
     sm.append('</urlset>'); open(os.path.join(dist, 'sitemap.xml'), 'w').write('\n'.join(sm) + '\n')
     bots = ['Googlebot', 'Bingbot', 'OAI-SearchBot', 'ChatGPT-User', 'GPTBot', 'PerplexityBot', 'Google-Extended', 'ClaudeBot', 'Applebot']
     open(os.path.join(dist, 'robots.txt'), 'w').write(''.join(f'User-agent: {b}\nAllow: /\n\n' for b in bots) + f'User-agent: *\nAllow: /\n\nSitemap: {SITE}/sitemap.xml\n')
     ll = [f'# {BRAND}', '', f'> {C.ORG_DESC}', '', C.LLMS_NOTE, '', f'Contact: {PHONE}, {EMAIL}. Address: Namaste Bookshop, {ADDR}.', '', '## Pages', '']
-    ll += [f'- [{pg["title"]}]({SITE}{pg["path"]}): {pg["desc"]}' for pg in PAGES if pg['sitemap']]
+    ll += [f'- [{pg["title"]}]({SITE}{urllib.parse.quote(pg["path"])}): {pg["desc"]}' for pg in PAGES if pg['sitemap']]
     open(os.path.join(dist, 'llms.txt'), 'w').write('\n'.join(ll) + '\n')
     print(f'built {len(PAGES)} pages + 404 into dist/ for {SITE}')
 def privacy(intro, products=False):
