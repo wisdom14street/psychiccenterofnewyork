@@ -23,7 +23,7 @@ LINES = {
  'anthony-fusco': 'Twenty-five years with the Voyager deck; business, relationships and timing.',
  'casey-deamoira': 'Thoth cards together with Hellenistic astrology, for the long path or this week.',
  'high-priestess-judith': 'La Gitana: tarot, astrology and mediumship, with love as her specialty.',
- 'damon-stang': 'Master tarot and folk magic, a professional reader for over a quarter century.',
+ 'damon-stang': 'A master tarot reader and folk magic practitioner, reading professionally for more than 25 years.',
  'jennifer-shanteau': 'Certified hypnotherapist; past-life and higher-self sessions, plus a short energy cleansing.',
  'dainichi-lazuli': 'Tarot, Vedic astrology, runes, numerology and aura reading, billed in 15-minute blocks.',
  'mallika': 'Lenormand for the facts and tarot for the reasons, with a push toward action.',
@@ -50,13 +50,13 @@ def shell(pg):
 def names(ks): return ', '.join(f'<a href="/readers/{k}/">{R[k]["name"]}</a>' for k in ks)
 def tile(k):
     r = R[k]
-    return (f'<li><a href="/readers/{k}/"><img src="{E(G.img(r["img"], 200))}" alt="" width="64" height="64" loading="lazy"><span><b>{E(r["name"])}</b>{E(LINES[k])}<em>from ${r["from"]}</em></span></a></li>')
+    return (f'<li><a href="/readers/{k}/"><img src="{E(G.headshot(k, 200))}" alt="" width="64" height="64" loading="lazy"><span><b>{E(r["name"])}</b>{E(LINES[k])}<em>from ${r["from"]}</em></span></a></li>')
 
 def reader_pages():
     for k in ORDER:
         r = R[k]; first = r['name'].split()[0]
         floor = {'upstairs': ('Suite 1104, 11th floor', '/healing-center/'), 'bookshop': ('Ground-floor tables', '/bookshop-floor/'), 'remote': ('Remote sessions', '/sessions/'), 'both': ('Both floors', '/visit/')}[r['home']]
-        body = (f'<section class="pg"><p class="ov">Reader &middot; {floor[0]}</p><div class="rp"><img src="{E(G.img(r["img"], 480))}" alt="{E(r["name"])}" width="200" height="200">'
+        body = (f'<section class="pg"><p class="ov">Reader &middot; {floor[0]}</p><div class="rp"><img src="{E(G.headshot(k, 480))}" alt="{E(r["name"])}" width="200" height="200">'
                 f'<div><h1>{E(r["name"])}</h1><p class="dek">{E(LINES[k])}</p><p>{WHERE[r["home"]]} <a href="{floor[1]}">About this space</a>.</p></div></div>'
                 f'<h2>Sessions and prices</h2>{G.services_list(k, "dl")}'
                 + (f'<p>{first} also takes phone sessions; choose the phone option when you reserve.</p>' if r['phone'] else '')
@@ -70,7 +70,7 @@ def reader_pages():
 def pages():
     reader_pages()
     home = (f'<section class="hero"><p class="ov">Fifth Avenue &amp; 14th Street &middot; Manhattan</p><h1>Readings on two floors of one Manhattan building</h1>'
-            f'<p class="dek">Psychic Center of New York gives tarot, psychic, mediumship and astrology readings, plus hypnotherapy, in two spaces: open reading tables on the ground floor inside Namaste Bookshop, and three private rooms up in Suite 1104.</p>'
+            f'<p class="dek">Psychic Center of New York offers tarot, psychic, mediumship and astrology readings, plus hypnotherapy, in two spaces: open reading tables on the ground floor inside Namaste Bookshop, and three private rooms upstairs in Suite 1104.</p>'
             f'<p><a class="btn" href="/reserve/">Reserve a session</a> <a class="lnk" href="/readers/">Meet the readers</a></p></section>'
             f'<section class="board" aria-label="Building directory"><h2>Directory</h2><table><tbody>'
             f'<tr><th>11</th><td><b>Suite 1104</b> &middot; private rooms<br><span>Windowed room &middot; second room &middot; third room. Readings, mediumship, hypnotherapy.</span></td><td><a href="/healing-center/">Details</a></td></tr>'
@@ -120,17 +120,17 @@ def pages():
     G.add('/healing-center/', 'Private Reading Rooms, 80 Fifth Ave Suite 1104 | Psychic Center of New York',
           'The upstairs side of Psychic Center of New York: three private rooms on the 11th floor at 80 Fifth Avenue, Suite 1104, who works there, and how to find it.', hc,
           crumbs=[('Home', '/'), ('Suite 1104', '/healing-center/')])
-    svc = [('Tarot readings', '15 to 60 minutes', 'from about $35', ["anthony-fusco", "casey-deamoira", "damon-stang", "tyler-t-mann-tarot"]),
-           ('Psychic and clairvoyant readings', '15 to 60 minutes', 'from about $35', ["catherine-marks", "rebecca-martinez", "brinly-erin", "andrea-dopewitchkira"]),
-           ('Mediumship', 'varies', 'from about $35', ["lizanne", "sophia-strange", "high-priestess-judith", "catherine-marks"]),
-           ('Astrology', '15 to 60 minutes', 'from about $40; one-hour specialist sessions cost more', ["priya", "casey-deamoira", "alexander-d-santiago", "dainichi-lazuli", "mychal-a-bryan"]),
-           ('Oracle and Lenormand', '15 to 60 minutes', 'from about $35', ["lu-camy", "mallika"]),
-           ('Hypnotherapy and hypnosis', '60 to 75 minutes', 'about $175', ["jennifer-shanteau", "lu-camy"]),
-           ('Energy cleansing', '15 minutes', 'about $44', ["jennifer-shanteau"])]
-    sv = ('<section class="pg"><h1>Sessions at the center</h1><p class="dek">Rates belong to the individual reader and appear on their profile. The figures here are approximate starting points.</p>'
-          '<div class="tbl"><table><thead><tr><th>Session</th><th>Length</th><th>Price</th><th>With</th></tr></thead><tbody>'
-          + ''.join(f'<tr><td>{a}</td><td>{b}</td><td>{c}</td><td>{names(d)}</td></tr>' for a, b, c, d in svc) + '</tbody></table></div>'
-          f'<h2>Remote sessions</h2><p>Some readers take phone sessions: {names([k for k in ORDER if R[k]["phone"]])}. Pick the phone option when you reserve.</p><p><a class="btn" href="/reserve/">Reserve a session</a></p></section>')
+    svc = [('Tarot readings', '15 to 60 minutes', 'From $35', ["anthony-fusco", "casey-deamoira", "damon-stang", "tyler-t-mann-tarot"]),
+           ('Psychic and clairvoyant readings', '15 to 60 minutes', 'From $35', ["catherine-marks", "rebecca-martinez", "brinly-erin", "andrea-dopewitchkira"]),
+           ('Mediumship', 'Varies by reader', 'From $35', ["lizanne", "sophia-strange", "high-priestess-judith", "catherine-marks"]),
+           ('Astrology', '15 to 60 minutes', 'From $40 (some 1-hour sessions cost more)', ["priya", "casey-deamoira", "alexander-d-santiago", "dainichi-lazuli", "mychal-a-bryan"]),
+           ('Oracle and Lenormand', '15 to 60 minutes', 'From $35', ["lu-camy", "mallika"]),
+           ('Hypnotherapy and hypnosis', '60 to 75 minutes', '$175', ["jennifer-shanteau", "lu-camy"]),
+           ('Energy cleansing', '15 minutes', '$44', ["jennifer-shanteau"])]
+    sv = ('<section class="pg"><h1>Sessions at the center</h1><p class="dek">Each reader sets their own prices, and every profile lists them. The prices below are typical starting points.</p>'
+          '<div class="tbl"><table><thead><tr><th>Session</th><th>Length</th><th>Price</th><th>Readers</th></tr></thead><tbody>'
+          + ''.join(f'<tr><td data-l="Session"><b>{a}</b></td><td data-l="Length"><span>{b}</span></td><td data-l="Price"><span>{c}</span></td><td data-l="Readers"><span>{names(d)}</span></td></tr>' for a, b, c, d in svc) + '</tbody></table></div>'
+          f'<h2>Remote sessions</h2><p>Some readers take phone sessions: {names([k for k in ORDER if R[k]["phone"]])}. Choose a phone session when you book.</p><p><a class="btn" href="/reserve/">Reserve a session</a></p></section>')
     G.add('/sessions/', 'Readings, Astrology & Hypnotherapy Sessions | Psychic Center of New York',
           'Sessions at Psychic Center of New York near Union Square: tarot, psychic, mediumship, astrology, oracle, hypnotherapy and energy cleansing, with typical lengths and prices.', sv,
           crumbs=[('Home', '/'), ('Sessions', '/sessions/')])
@@ -169,7 +169,8 @@ def pages():
 NOTFOUND_DESC = 'Page not found on psychiccenterofnewyork.com.'
 NOTFOUND = '<section class="pg"><h1>No such room</h1><p>This page is not in the building. Try the <a href="/">directory</a> or <a href="/visit/">visit info</a>.</p></section>'
 
-CSS = """.tiles{list-style:none;padding:0;display:grid;gap:10px}@media(min-width:700px){.tiles{grid-template-columns:1fr 1fr}}.tiles a{display:flex;gap:12px;background:#fff;padding:12px;text-decoration:none;color:var(--ink);border-left:4px solid var(--brass)}.tiles img{object-fit:cover;flex:none}.tiles span{display:flex;flex-direction:column}.tiles b{color:var(--navy);font-family:'Playfair Display',serif}.tiles em{font-style:normal;color:#8a6d3e;font-weight:700;font-size:.88rem}
+CSS = """@media(max-width:640px){.tbl thead{display:none}.tbl table,.tbl tbody,.tbl tr,.tbl td{display:block;width:100%}.tbl tr{border-bottom:2px solid #e2ddd1;padding:6px 0}.tbl td{border:0;padding:3px 10px;display:grid;grid-template-columns:76px 1fr;gap:8px}.tbl td::before{content:attr(data-l);font-size:.8rem;color:#6b5a3a;font-weight:700;text-transform:uppercase;letter-spacing:.04em}}
+.tiles{list-style:none;padding:0;display:grid;gap:10px}@media(min-width:700px){.tiles{grid-template-columns:1fr 1fr}}.tiles a{display:flex;gap:12px;background:#fff;padding:12px;text-decoration:none;color:var(--ink);border-left:4px solid var(--brass)}.tiles img{object-fit:cover;flex:none}.tiles span{display:flex;flex-direction:column}.tiles b{color:var(--navy);font-family:'Playfair Display',serif}.tiles em{font-style:normal;color:#8a6d3e;font-weight:700;font-size:.88rem}
 .rp{display:grid;gap:16px}@media(min-width:640px){.rp{grid-template-columns:200px 1fr;align-items:center}}.rp img{width:200px;height:200px;object-fit:cover;border:4px solid var(--brass)}.rp h1{margin-top:0}
 dl.svc{display:grid;grid-template-columns:auto 1fr;gap:6px 14px;background:#fff;padding:14px;border-top:3px solid var(--navy)}dl.svc dt{font-weight:700;color:var(--navy)}dl.svc dd{margin:0}
 :root{--navy:#14284b;--brass:#b08d57;--stone:#f2efe8;--ink:#1b2130}
@@ -181,7 +182,7 @@ h1,h2{font-family:'Playfair Display',Georgia,serif;line-height:1.15;color:var(--
 .hb{border:1.5px solid var(--brass);color:#fff;text-decoration:none;padding:8px 12px;font-weight:700;font-size:.88rem}
 .n{display:flex;gap:2px;overflow-x:auto;max-width:1080px;margin:0 auto;padding:0 10px 8px;scrollbar-width:none}.n a{color:#d6dcea;text-decoration:none;padding:6px 10px;white-space:nowrap;font-weight:600;font-size:.9rem}
 .n a[aria-current]{color:var(--brass)}
-main{max-width:1080px;margin:0 auto;padding:0 16px 30px}.ov{text-transform:uppercase;letter-spacing:.2em;font-size:.72rem;font-weight:700;color:#8a6d3e;margin:0}.dek{font-size:1.12rem;max-width:720px}
+main{max-width:1080px;margin:0 auto;padding:0 16px 30px}.ov{text-transform:uppercase;letter-spacing:.2em;font-size:.72rem;font-weight:700;color:#7a5f33;margin:0}.dek{font-size:1.12rem;max-width:720px}
 .hero{padding:30px 0 10px}
 .board{background:#0d1b33;color:#e9e2d2;padding:16px;border-radius:4px;border:6px solid #2a3b5c;font-family:'Courier New',monospace}.board h2{color:var(--brass);font-family:'Courier New',monospace;letter-spacing:.3em;text-transform:uppercase;font-size:.95rem;margin:.2em 0 .6em}
 .board table{width:100%;border-collapse:collapse}.board th{font-size:1.8rem;color:var(--brass);width:56px;vertical-align:top;text-align:left;padding:8px 4px}.board td{padding:8px 4px;border-top:1px dashed #3b4d70;vertical-align:top}.board span{color:#b9c2d6;font-size:.9rem}.board a{color:var(--brass)}

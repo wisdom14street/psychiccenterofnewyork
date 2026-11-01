@@ -114,6 +114,9 @@ def product_ld(items, name):
     return {'@context': 'https://schema.org', '@type': 'ItemList', 'name': name, 'itemListElement': [
         {'@type': 'ListItem', 'position': i + 1, 'url': f"{SITE}/products/{x['h']}/", 'name': x['t']} for i, x in enumerate(items)]}
 CATALOG = {}
+def product_ld_items(items, name):
+    return {'@context': 'https://schema.org', '@type': 'ItemList', 'name': name, 'itemListElement': [
+        {'@type': 'ListItem', 'position': i + 1, 'url': f"{SITE}/products/{x['h']}/", 'name': x['name']} for i, x in enumerate(items)]}
 def _cat(x, cat):
     CATALOG.setdefault(x['h'], {'h': x['h'], 't': x['t'], 'p': x['p'], 'v': x['v'], 'i': img(x['img'], 400), 'c': cat, 'k': cat, 'r': len(CATALOG), 'x': False})
 def atc(x, cat, label='Add to cart', cls='atc', ident=False):
@@ -145,19 +148,20 @@ def readers():
     if _R is None: _R = json.load(open(os.path.join(ROOT, 'site', 'readers.json')))
     return _R
 def services_list(k, fmt):
-    sv = readers()[k].get('services') or []
+    sv = [(re.sub(r'(\d+) ?mins?\b', r'\1 minutes', a), b) for a, b in (readers()[k].get('services') or [])]
     if fmt == 'table': return '<table class="svc"><tbody>' + ''.join(f'<tr><td>{E(a) or "Session"}</td><td>{E(b)}</td></tr>' for a, b in sv) + '</tbody></table>'
     if fmt == 'dl': return '<dl class="svc">' + ''.join(f'<dt>{E(b)}</dt><dd>{E(a) or "Session"}</dd>' for a, b in sv) + '</dl>'
     if fmt == 'chips': return '<ul class="svc">' + ''.join(f'<li><b>{E(b)}</b> {E(a)}</li>' for a, b in sv) + '</ul>'
     return '<p class="svc">' + ' &middot; '.join(f'{E(a)}: {E(b)}' for a, b in sv) + '</p>'
+def headshot(k, n=480): return f'/img/readers/{k}-{160 if n <= 240 else 480}.jpg'
 def person_ld(k, path):
     r = readers()[k]
-    return {'@context': 'https://schema.org', '@type': 'Person', 'name': r['name'], 'image': r['img'], 'url': SITE + path, 'jobTitle': r.get('spec', ''),
+    return {'@context': 'https://schema.org', '@type': 'Person', 'name': r['name'], 'image': SITE + headshot(k), 'url': SITE + path, 'jobTitle': r.get('spec', ''),
             'worksFor': {'@id': SITE + '/#business'}}
 # ---------- page assembly ----------
 PAGES = []
-def add(path, title, desc, body, ld=(), crumbs=None, nav=None, robots=None, sitemap=True, ogimg='/og.jpg'):
-    PAGES.append(dict(path=path, title=title, desc=desc, body=body, ld=list(ld), crumbs=crumbs, nav=nav, robots=robots, sitemap=sitemap, ogimg=ogimg))
+def add(path, title, desc, body, ld=(), crumbs=None, nav=None, robots=None, sitemap=True, ogimg='/og.jpg', preload=''):
+    PAGES.append(dict(path=path, title=title, desc=desc, body=body, ld=list(ld), crumbs=crumbs, nav=nav, robots=robots, sitemap=sitemap, ogimg=ogimg, preload=preload))
 def ga_head():
     if PREVIEW or not GA_ID: return ''
     cfg = json.dumps({'site_brand': BRAND}).replace('</', '<\\/')
@@ -167,7 +171,8 @@ def render(pg):
     canon = SITE + pg['path']
     ld = [org_ld()] + pg['ld']
     if pg['crumbs']: ld.append(crumbs_ld(pg['crumbs']))
-    head = (f'<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">{ga_head()}'
+    head = (f'<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">'
+            + ('<link rel="preconnect" href="https://cdn.shopify.com">' if getattr(C, 'CART', False) else '') + pg.get('preload', '') + f'{ga_head()}'
             f'<title>{E(pg["title"])}</title><meta name="description" content="{E(pg["desc"])}">'
             + (f'<meta name="robots" content="{pg["robots"]}">' if pg['robots'] else '')
             + (f'<link rel="canonical" href="{canon}">' if pg['robots'] is None else '')
@@ -175,10 +180,10 @@ def render(pg):
             f'<meta property="og:description" content="{E(pg["desc"])}"><meta property="og:url" content="{canon}"><meta property="og:image" content="{SITE}{pg["ogimg"]}">'
             f'<meta property="og:image:width" content="1200"><meta property="og:image:height" content="630"><meta name="twitter:card" content="summary_large_image">'
             f'<meta name="theme-color" content="{C.THEME_COLOR}"><link rel="icon" href="/favicon.svg" type="image/svg+xml"><link rel="apple-touch-icon" href="/apple-touch-icon.png">'
-            + (f'<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="{C.FONTS}">' if C.FONTS else '')
-            + ('<link rel="stylesheet" href="/assets/cart.css">' if getattr(C, 'CART', False) else '') + '<link rel="stylesheet" href="/assets/site.css">' + ''.join(ldjson(x) for x in ld) + '</head>')
+            + (f'<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="{C.FONTS}" media="print" onload="this.media=\'all\'"><noscript><link rel="stylesheet" href="{C.FONTS}"></noscript>' if C.FONTS else '')
+            + ('<link rel="stylesheet" href="/assets/cart.css"><link rel="stylesheet" href="/assets/shop.css">' if getattr(C, 'CART', False) else '') + '<link rel="stylesheet" href="/assets/site.css">' + ''.join(ldjson(x) for x in ld) + '</head>')
     body = C.shell(pg)
-    tail = (cart_boot() if getattr(C, 'CART', False) else '') + ('<script src="/assets/ga.js" defer></script>' if ga_head() else '')
+    tail = (cart_boot() + '<script src="/assets/shop.js" defer></script>' if getattr(C, 'CART', False) else '') + ('<script src="/assets/ga.js" defer></script>' if ga_head() else '')
     return head + body.replace('</body>', tail + '</body>') if '</body>' in body else head + body + tail + '</body></html>'
 def write(path, s):
     f = os.path.join(ROOT, 'dist', path.lstrip('/'))
@@ -195,12 +200,16 @@ def build():
     nf = dict(path='/404.html', title=f'Page not found | {BRAND}', desc=C.NOTFOUND_DESC, body=C.NOTFOUND, ld=[], crumbs=None, nav=None, robots='noindex', sitemap=False, ogimg='/og.jpg')
     open(os.path.join(dist, '404.html'), 'w').write(render(nf))
     open(os.path.join(dist, 'assets', 'site.css'), 'w').write(C.CSS)
-    for f in ('ga.js', 'cart.js', 'cart.css'): shutil.copy(os.path.join(ROOT, 'scripts', f), os.path.join(dist, 'assets', f))
+    for f in ('ga.js', 'cart.js', 'cart.css', 'shop.js', 'shop.css', 'no-photo.svg'):
+        if os.path.exists(os.path.join(ROOT, 'scripts', f)): shutil.copy(os.path.join(ROOT, 'scripts', f), os.path.join(dist, 'assets', f))
+    if 'shop' in sys.modules: sys.modules['shop'].write_json(dist)
     if CATALOG:
         os.makedirs(os.path.join(dist, 'data'), exist_ok=True); json.dump(list(CATALOG.values()), open(os.path.join(dist, 'data', 'catalog.json'), 'w'))
     st = os.path.join(ROOT, 'static')
     if os.path.isdir(st):
-        for f in os.listdir(st): shutil.copy(os.path.join(st, f), os.path.join(dist, f))
+        for f in os.listdir(st):
+            if os.path.isdir(os.path.join(st, f)): shutil.copytree(os.path.join(st, f), os.path.join(dist, f))
+            else: shutil.copy(os.path.join(st, f), os.path.join(dist, f))
     open(os.path.join(dist, 'CNAME'), 'w').write(DOMAIN + '\n')
     sm = ['<?xml version="1.0" encoding="UTF-8"?>', '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">']
     for pg in PAGES:
