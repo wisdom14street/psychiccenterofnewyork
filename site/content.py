@@ -1,111 +1,178 @@
-"""Psychic Center of New York: the physical side of Namaste's readings. The two reading spots on the Bookshop floor, the three rooms of the
-Healing Center upstairs at 80 Fifth Ave Suite 1104, the services held there, the schedule, and how to visit."""
+"""Psychic Center of New York: a reading center on two floors of one building at Fifth Avenue and 14th Street. Ground-floor tables inside
+Namaste Bookshop, private rooms upstairs in Suite 1104, its readers, sessions, schedule and visit info."""
 import json, os
 import engine as G
 E = G.E
 BUSINESS_TYPE = 'LocalBusiness'
 THEME_COLOR = '#14284b'
 FONTS = 'https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;800&family=Karla:wght@400;600;700&display=swap'
-ORG_DESC = 'Psychic Center of New York describes the reading spaces of Namaste Bookshop at 2 West 14th Street and the Namaste Healing Center upstairs at 80 Fifth Avenue, Suite 1104, in Manhattan.'
-LLMS_NOTE = ('Psychic Center of New York is a Wealth Edge Ventures Inc. brand connected to Namaste Bookshop. It covers the physical spaces where Namaste readings and sessions take place: '
-             'two reading spots in the Bookshop at 2 West 14th Street and three rooms in the Namaste Healing Center, 80 Fifth Avenue, 11th floor, Suite 1104 (same building). Bookings go through Namaste Bookshop.')
+ORG_DESC = 'Psychic Center of New York offers tarot, psychic, mediumship and astrology readings, hypnotherapy and energy sessions in two Manhattan spaces: reading tables inside Namaste Bookshop at 2 West 14th Street and private rooms upstairs at 80 Fifth Avenue, Suite 1104.'
+LLMS_NOTE = ('Psychic Center of New York is operated by Wealth Edge Ventures Inc. Its ground-floor reading tables are inside Namaste Bookshop, 2 West 14th Street, New York, NY 10011, and its private rooms are on the 11th floor of the same building, 80 Fifth Avenue, Suite 1104 (the Namaste Healing Center suite). '
+             'Each reader has a profile on this site; booking is the reader\'s own Square scheduling page.')
 R = json.load(open(os.path.join(os.path.dirname(__file__), 'readers.json')))
 UP = ['rebecca-martinez', 'catherine-marks', 'anthony-fusco', 'casey-deamoira', 'high-priestess-judith', 'damon-stang', 'jennifer-shanteau', 'dainichi-lazuli', 'mallika']
 DOWN = ['alexander-d-santiago', 'andrea-dopewitchkira', 'priya', 'tyler-t-mann-tarot', 'sophia-strange', 'brinly-erin', 'lizanne']
-NAV = [('/bookshop-floor/', 'Bookshop floor'), ('/healing-center/', 'Healing Center'), ('/sessions/', 'Sessions'), ('/schedule-and-events/', 'Schedule'), ('/visit/', 'Visit'), ('/faq/', 'FAQ')]
-HC_LD = {'@context': 'https://schema.org', '@type': 'HealthAndBeautyBusiness', 'name': 'Namaste Healing Center', 'telephone': '+1-212-645-0141',
-         'address': {'@type': 'PostalAddress', 'streetAddress': '80 Fifth Avenue, Suite 1104', 'addressLocality': 'New York', 'addressRegion': 'NY', 'postalCode': '10011', 'addressCountry': 'US'},
-         'parentOrganization': {'@type': 'Organization', 'name': 'Namaste Bookshop', 'url': 'https://namastebookshop.com/'}, 'url': 'https://namastebookshop.com/pages/namaste-healing-center'}
+PLACES = [{'@type': 'Place', 'name': 'Ground-floor reading tables, inside Namaste Bookshop', 'address': G.ADDRESS_LD},
+          {'@type': 'Place', 'name': 'Suite 1104 private rooms (Namaste Healing Center)', 'address': {'@type': 'PostalAddress', 'streetAddress': '80 Fifth Avenue, Suite 1104', 'addressLocality': 'New York', 'addressRegion': 'NY', 'postalCode': '10011', 'addressCountry': 'US'}}]
+ORG_EXTRA = {'location': PLACES}
+NAV = [('/readers/', 'Readers'), ('/bookshop-floor/', 'Ground floor'), ('/healing-center/', 'Suite 1104'), ('/sessions/', 'Sessions'), ('/schedule-and-events/', 'Schedule'), ('/visit/', 'Visit'), ('/faq/', 'FAQ')]
+
+LINES = {
+ 'rebecca-martinez': 'Clairaudient tarot in English or Spanish, paced to whatever you bring in.',
+ 'catherine-marks': 'A clairvoyant and medium who prefers the questions that are bigger than yes or no.',
+ 'anthony-fusco': 'Twenty-five years with the Voyager deck; business, relationships and timing.',
+ 'casey-deamoira': 'Thoth cards together with Hellenistic astrology, for the long path or this week.',
+ 'high-priestess-judith': 'La Gitana: tarot, astrology and mediumship, with love as her specialty.',
+ 'damon-stang': 'Master tarot and folk magic, a professional reader for over a quarter century.',
+ 'jennifer-shanteau': 'Certified hypnotherapist; past-life and higher-self sessions, plus a short energy cleansing.',
+ 'dainichi-lazuli': 'Tarot, Vedic astrology, runes, numerology and aura reading, billed by the quarter hour.',
+ 'mallika': 'Lenormand for the facts and tarot for the reasons, with a push toward action.',
+ 'alexander-d-santiago': 'Tarot, or Western and Vedic chart work with gemstone and flower-essence suggestions.',
+ 'andrea-dopewitchkira': 'Clairvoyant tarot and longer Witch Talk conversations.',
+ 'priya': 'Astrology and tarot from a third-generation astrologer known for Chiron work.',
+ 'tyler-t-mann-tarot': 'Tarot with a motivational coach\'s eye for the practical next move.',
+ 'sophia-strange': 'Psychic medium and poet; you leave with a poem written from your spread.',
+ 'brinly-erin': 'Clairvoyant and clairaudient, centered on self-worth and inner strength.',
+ 'lizanne': 'Intuitive medium who opens with your question and works with art cards.',
+ 'lu-camy': 'Oracle readings with her own Soul Synergy deck, and clinical hypnosis.',
+ 'mychal-a-bryan': 'Hour-long Qabalistic tarot or traditional astrology, read remotely.',
+}
+WHERE = {'upstairs': 'Usually reads in the Suite 1104 rooms upstairs.', 'bookshop': 'Usually reads at the ground-floor tables.', 'remote': 'Currently reads remotely.', 'both': 'Works upstairs some days and downstairs on others.'}
+ORDER = UP + ['lu-camy'] + DOWN + ['mychal-a-bryan']
 
 def shell(pg):
     nav = ''.join(f'<a href="{h}"' + (' aria-current="page"' if pg['path'].startswith(h) else '') + f'>{t}</a>' for h, t in NAV)
     return (f'<body><a class="skip" href="#main">Skip to content</a><header class="h"><div class="hi"><a class="brand" href="/"><span class="b1">Psychic Center</span><span class="b2">of New York</span></a>'
-            f'<a class="hb" href="{G.BOOK}">Reserve a session</a></div><nav class="n" aria-label="Main">{nav}</nav></header><main id="main">{pg["body"]}</main>'
-            f'<footer class="f"><div class="fi"><div><p class="fb">Psychic Center of New York</p><p>Namaste Bookshop, {G.ADDR}<br>Healing Center upstairs, Suite 1104 at 80 Fifth Ave</p></div>'
-            f'<div><p><a href="tel:{G.TEL}">{G.PHONE}</a><br><a href="mailto:{G.EMAIL}">{G.EMAIL}</a></p><p>A Wealth Edge Ventures Inc. brand, connected to Namaste Bookshop. <a href="/about/">About</a> &middot; <a href="/privacy/">Privacy</a></p></div></div></footer></body></html>')
+            f'<a class="hb" href="/reserve/">Reserve a session</a></div><nav class="n" aria-label="Main">{nav}</nav></header><main id="main">{pg["body"]}</main>'
+            f'<footer class="f"><div class="fi"><div><p class="fb">Psychic Center of New York</p><p>Ground floor: inside Namaste Bookshop, {G.ADDR}<br>Upstairs: 80 Fifth Avenue, Suite 1104</p></div>'
+            f'<div><p><a href="tel:{G.TEL}">{G.PHONE}</a><br><a href="mailto:{G.EMAIL}">{G.EMAIL}</a></p><p>Operated by Wealth Edge Ventures Inc. <a href="/about/">About</a> &middot; <a href="/privacy/">Privacy</a></p></div></div></footer></body></html>')
 
-def names(ks): return ', '.join(R[k]['name'] for k in ks)
+def names(ks): return ', '.join(f'<a href="/readers/{k}/">{R[k]["name"]}</a>' for k in ks)
+def tile(k):
+    r = R[k]
+    return (f'<li><a href="/readers/{k}/"><img src="{E(G.img(r["img"], 200))}" alt="" width="64" height="64" loading="lazy"><span><b>{E(r["name"])}</b>{E(LINES[k])}<em>from ${r["from"]}</em></span></a></li>')
+
+def reader_pages():
+    for k in ORDER:
+        r = R[k]; first = r['name'].split()[0]
+        floor = {'upstairs': ('Suite 1104, 11th floor', '/healing-center/'), 'bookshop': ('Ground-floor tables', '/bookshop-floor/'), 'remote': ('Remote sessions', '/sessions/'), 'both': ('Both floors', '/visit/')}[r['home']]
+        body = (f'<section class="pg"><p class="ov">Reader &middot; {floor[0]}</p><div class="rp"><img src="{E(G.img(r["img"], 480))}" alt="{E(r["name"])}" width="200" height="200">'
+                f'<div><h1>{E(r["name"])}</h1><p class="dek">{E(LINES[k])}</p><p>{WHERE[r["home"]]} <a href="{floor[1]}">About this space</a>.</p></div></div>'
+                f'<h2>Sessions and prices</h2>{G.services_list(k, "dl")}'
+                + (f'<p>{first} also takes phone sessions; choose the phone option when you reserve.</p>' if r['phone'] else '')
+                + f'<p><a class="btn" href="{E(r["book"])}" rel="nofollow noopener">Reserve with {E(first)}</a></p>'
+                f'<p class="sm">Reserving opens {E(first)}\'s Square scheduling page, where you see live open times and pay to confirm. Need help? Call {G.PHONE}.</p>'
+                f'<p class="sm">Profile details come from the reader\'s own listing.</p><p><a href="/readers/">All readers</a></p></section>')
+        G.add(f'/readers/{k}/', f'{r["name"]} | Readers at Psychic Center of New York',
+              f'{r["name"]} at Psychic Center of New York: {LINES[k]} Sessions from ${r["from"]}.', body,
+              ld=[G.person_ld(k, f'/readers/{k}/')], crumbs=[('Home', '/'), ('Readers', '/readers/'), (r['name'], f'/readers/{k}/')])
 
 def pages():
-    home = (f'<section class="hero"><p class="ov">Union Square &middot; Fifth Avenue &amp; 14th Street</p><h1>Two floors of readings in one Manhattan building</h1>'
-            f'<p class="dek">Psychic Center of New York is the guide to where Namaste readings actually happen: two reading spots on the ground floor of Namaste Bookshop, and three private rooms in the Namaste Healing Center on the 11th floor upstairs.</p></section>'
+    reader_pages()
+    home = (f'<section class="hero"><p class="ov">Fifth Avenue &amp; 14th Street &middot; Manhattan</p><h1>Readings on two floors of one Manhattan building</h1>'
+            f'<p class="dek">Psychic Center of New York gives tarot, psychic, mediumship and astrology readings, plus hypnotherapy, in two spaces: open reading tables on the ground floor inside Namaste Bookshop, and three private rooms up in Suite 1104.</p>'
+            f'<p><a class="btn" href="/reserve/">Reserve a session</a> <a class="lnk" href="/readers/">Meet the readers</a></p></section>'
             f'<section class="board" aria-label="Building directory"><h2>Directory</h2><table><tbody>'
-            f'<tr><th>11</th><td><b>Namaste Healing Center</b> &middot; Suite 1104<br><span>Windowed room &middot; second room &middot; third room. Private sessions, readings, hypnotherapy.</span></td><td><a href="/healing-center/">Details</a></td></tr>'
-            f'<tr><th>G</th><td><b>Namaste Bookshop</b> &middot; 2 W 14th St<br><span>Main spot at the back of the sales floor &middot; Window spot at the front.</span></td><td><a href="/bookshop-floor/">Details</a></td></tr>'
+            f'<tr><th>11</th><td><b>Suite 1104</b> &middot; private rooms<br><span>Windowed room &middot; second room &middot; third room. Readings, mediumship, hypnotherapy.</span></td><td><a href="/healing-center/">Details</a></td></tr>'
+            f'<tr><th>G</th><td><b>Ground-floor tables</b> &middot; inside Namaste Bookshop<br><span>Main table at the back of the sales floor &middot; window table at the front.</span></td><td><a href="/bookshop-floor/">Details</a></td></tr>'
             f'</tbody></table></section>'
-            f'<section class="cols"><div><h2>Downstairs or upstairs?</h2><p>The shop floor has the bustle of the bookshop around you. The Healing Center rooms have doors that close. Each reader has a usual space, and your booking confirmation says where to go.</p></div>'
-            f'<div><h2>What happens here</h2><p>Tarot, psychic and mediumship readings, astrology, oracle and Lenormand, hypnotherapy and short energy-cleansing sessions. <a href="/sessions/">See all sessions</a>.</p></div>'
-            f'<div><h2>Hours</h2><p>' + '<br>'.join(f'{d}: {h}' for d, h in G.HOURS) + f'</p><p><a href="/visit/">Plan a visit</a></p></div></section>')
-    G.add('/', 'Psychic Center of New York | Reading Rooms at Namaste, Union Square',
-          'Where Namaste readings happen in Manhattan: two reading spots in Namaste Bookshop at 2 W 14th St and three private rooms at the Healing Center, 80 Fifth Ave Suite 1104.', home,
-          ld=[G.shop_ld('LocalBusiness'), HC_LD])
-    bf = (f'<section class="pg"><p class="ov">Ground floor</p><h1>The Bookshop floor</h1><p class="dek">Namaste Bookshop, {G.ADDR}. Readings on this floor happen inside the shop itself.</p>'
-          f'<div class="two"><article><h2>Main spot</h2><p>The reading table at the back of the sales floor. It is the first spot the shop fills each day.</p></article>'
-          f'<article><h2>Window spot</h2><p>A second table at the front, by the store window, used when more than one reader is working downstairs.</p></article></div>'
-          f'<h2>Readers usually based downstairs</h2><p>{names(DOWN)}.</p><p class="sm">Usual spots can change on a given day. Lu Camy works both floors depending on the day.</p>'
-          f'<h2>Good to know</h2><ul><li>The shop is open to the public, so the floor can be lively, especially on weekends.</li><li>If you want more privacy, ask for a reader who works in the Healing Center upstairs.</li></ul>'
-          f'<p><a class="btn" href="{G.BOOK}">Book a reader</a></p></section>')
-    G.add('/bookshop-floor/', 'Reading Spots Inside Namaste Bookshop, 2 W 14th St | Psychic Center of New York',
-          'The two reading tables on the Namaste Bookshop sales floor, the main spot and the window spot, and which readers usually work downstairs.', bf,
-          crumbs=[('Home', '/'), ('Bookshop floor', '/bookshop-floor/')])
-    hc = (f'<section class="pg"><p class="ov">11th floor &middot; Suite 1104</p><h1>The Namaste Healing Center</h1><p class="dek">{G.HC_STREET}, New York, NY 10011. The same building as the bookshop, with its own entrance at 80 Fifth Avenue, around the corner from the shop door.</p>'
+            f'<section class="cols"><div><h2>Downstairs or upstairs?</h2><p>The ground-floor tables have the bustle of a busy shop around you. The upstairs rooms have doors that close. Each reader has a usual space, and your confirmation says where to go.</p></div>'
+            f'<div><h2>What we offer</h2><p>Tarot, psychic and mediumship readings, astrology, oracle and Lenormand, hypnotherapy and short energy-cleansing sessions. <a href="/sessions/">See all sessions</a>.</p></div>'
+            f'<div><h2>Hours</h2><p>' + '<br>'.join(f'{d}: {h}' for d, h in G.HOURS) + f'</p><p><a href="/visit/">Plan a visit</a></p></div></section>'
+            f'<section class="pg"><h2>Readers at the center</h2><ul class="tiles">' + ''.join(tile(k) for k in ORDER[:6]) + '</ul><p><a href="/readers/">All 18 readers</a></p></section>')
+    G.add('/', 'Psychic Center of New York | Tarot, Psychic & Medium Readings, Union Square',
+          'Psychic Center of New York: tarot, psychic, mediumship and astrology readings and hypnotherapy at Fifth Ave & 14th St, with ground-floor tables and private rooms in Suite 1104.', home,
+          ld=[G.shop_ld()])
+    rd = ('<section class="pg"><h1>Our readers</h1><p class="dek">Eighteen readers and practitioners work at the center. Open a profile for prices and to reserve a time.</p>'
+          '<h2>Upstairs, Suite 1104</h2><ul class="tiles">' + ''.join(tile(k) for k in UP) + '</ul>'
+          '<h2>Ground-floor tables</h2><ul class="tiles">' + ''.join(tile(k) for k in DOWN) + '</ul>'
+          '<h2>Both floors, or remote</h2><ul class="tiles">' + tile('lu-camy') + tile('mychal-a-bryan') + '</ul></section>')
+    G.add('/readers/', 'Readers & Practitioners | Psychic Center of New York',
+          'The eighteen tarot readers, psychics, mediums, astrologers and hypnotherapists of Psychic Center of New York, grouped by the floor where they usually work.', rd,
+          crumbs=[('Home', '/'), ('Readers', '/readers/')])
+    rs = ('<section class="pg"><h1>Reserve a session</h1><ol class="rooms"><li><b>Pick a reader</b>Choose by style below, or by floor on the <a href="/readers/">readers page</a>.</li>'
+          '<li><b>Open their profile</b>Prices for every session length are listed there.</li><li><b>Press Reserve</b>Their scheduling page shows live openings; pay to confirm.</li></ol>'
+          '<h2>By kind of session</h2><dl class="faq">'
+          f'<dt>Tarot</dt><dd>{names(["anthony-fusco", "casey-deamoira", "damon-stang", "tyler-t-mann-tarot", "mallika"])}</dd>'
+          f'<dt>Psychic and clairvoyant</dt><dd>{names(["catherine-marks", "rebecca-martinez", "brinly-erin", "andrea-dopewitchkira"])}</dd>'
+          f'<dt>Mediumship</dt><dd>{names(["lizanne", "sophia-strange", "high-priestess-judith"])}</dd>'
+          f'<dt>Astrology</dt><dd>{names(["priya", "alexander-d-santiago", "dainichi-lazuli", "mychal-a-bryan"])}</dd>'
+          f'<dt>Hypnotherapy and energy</dt><dd>{names(["jennifer-shanteau", "lu-camy"])}</dd></dl>'
+          f'<p class="sm">Prefer to talk it through? Call {G.PHONE} and we will help you pick.</p></section>')
+    G.add('/reserve/', 'Reserve a Reading or Session | Psychic Center of New York',
+          'How to reserve a session at Psychic Center of New York: pick a reader by style or floor, check prices on their profile, and confirm a live opening.', rs,
+          crumbs=[('Home', '/'), ('Reserve', '/reserve/')])
+    bf = (f'<section class="pg"><p class="ov">Ground floor</p><h1>The ground-floor tables</h1><p class="dek">Our two downstairs tables sit inside Namaste Bookshop at {G.ADDR}, among the shelves of the shop.</p>'
+          f'<div class="two"><article><h2>Main table</h2><p>At the back of the sales floor. It is the first table filled each day.</p></article>'
+          f'<article><h2>Window table</h2><p>By the front window, used when more than one reader is working downstairs.</p></article></div>'
+          f'<h2>Readers usually based downstairs</h2><p>{names(DOWN)}.</p><p class="sm">Usual tables can change on a given day. <a href="/readers/lu-camy/">Lu Camy</a> works both floors.</p>'
+          f'<h2>Good to know</h2><ul><li>The shop is open to the public, so the floor can be lively, especially on weekends.</li><li>For more privacy, choose a reader who works in the upstairs rooms.</li></ul>'
+          f'<p><a class="btn" href="/reserve/">Reserve a table session</a></p></section>')
+    G.add('/bookshop-floor/', 'Ground-Floor Reading Tables at 2 W 14th St | Psychic Center of New York',
+          'Psychic Center of New York\'s two ground-floor reading tables inside Namaste Bookshop, the main table and the window table, and the readers usually based there.', bf,
+          crumbs=[('Home', '/'), ('Ground floor', '/bookshop-floor/')])
+    hc = (f'<section class="pg"><p class="ov">11th floor &middot; Suite 1104</p><h1>The upstairs rooms</h1><p class="dek">80 Fifth Avenue, Suite 1104, New York, NY 10011. The same building as the ground-floor tables, with its own entrance at 80 Fifth Avenue, around the corner. The suite is also known as the Namaste Healing Center.</p>'
           f'<h2>The rooms</h2><ol class="rooms"><li><b>The windowed room</b>Natural light from the window.</li><li><b>The second room</b>A standard private session room.</li><li><b>The third room</b>Smaller, and it doubles as storage, but works fine for a reading.</li></ol>'
-          f'<h2>Who works upstairs</h2><p>{names(UP)}. Mychal A. Bryan belongs to the Healing Center but currently reads remotely.</p>'
-          f'<h2>Getting there</h2><p>Enter the building at 80 Fifth Avenue and go up to Suite 1104 on the 11th floor. If you are unsure where your session is, check your booking confirmation or call {G.PHONE}.</p>'
+          f'<h2>Who works upstairs</h2><p>{names(UP)}. <a href="/readers/mychal-a-bryan/">Mychal A. Bryan</a> belongs to the upstairs team but currently reads remotely.</p>'
+          f'<h2>Getting there</h2><p>Enter the building at 80 Fifth Avenue and go up to Suite 1104 on the 11th floor. If you are unsure where your session is, check your confirmation or call {G.PHONE}.</p>'
           f'<p class="sm">Sessions here are for wellbeing and reflection. For any health concern, see a licensed clinician.</p>'
-          f'<p><a class="btn" href="{G.SHOP}/pages/namaste-healing-center">Healing Center page on namastebookshop.com</a></p></section>')
-    G.add('/healing-center/', 'Namaste Healing Center, 80 Fifth Ave Suite 1104 | Psychic Center of New York',
-          'The Namaste Healing Center on the 11th floor at 80 Fifth Avenue, Suite 1104: three private rooms for readings and sessions, who works there, and how to find it.', hc,
-          ld=[HC_LD], crumbs=[('Home', '/'), ('Healing Center', '/healing-center/')])
-    svc = [('Tarot readings', '15 to 60 minutes', 'from about $35', 'Most readers on both floors.'),
-           ('Psychic and clairvoyant readings', '15 to 60 minutes', 'from about $35', 'Catherine Marks, Rebecca Martinez, Brinly Erin, Andrea.'),
-           ('Mediumship', 'varies', 'from about $35', 'Lizanne, Sophia Strange, High Priestess Judith, Catherine Marks.'),
-           ('Astrology', '15 to 60 minutes', 'from about $40; one-hour specialist sessions cost more', 'Priya, Casey Deamoira, Alexander D. Santiago, Dainichi Lazuli, Mychal A. Bryan.'),
-           ('Oracle and Lenormand', '15 to 60 minutes', 'from about $35', 'Lu Camy (oracle), Mallika (Lenormand with tarot).'),
-           ('Hypnotherapy and hypnosis', '60 to 75 minutes', 'about $175', 'Jennifer Shanteau, Lu Camy.'),
-           ('Energy cleansing', '15 minutes', 'about $44', 'Jennifer Shanteau.')]
-    sv = ('<section class="pg"><h1>Sessions held at the center</h1><p class="dek">Rates belong to the individual reader and appear at booking. The figures here are approximate starting points from their posted price lists.</p>'
+          f'<p><a class="btn" href="/reserve/">Reserve an upstairs session</a></p></section>')
+    G.add('/healing-center/', 'Private Reading Rooms, 80 Fifth Ave Suite 1104 | Psychic Center of New York',
+          'The upstairs side of Psychic Center of New York: three private rooms on the 11th floor at 80 Fifth Avenue, Suite 1104, who works there, and how to find it.', hc,
+          crumbs=[('Home', '/'), ('Suite 1104', '/healing-center/')])
+    svc = [('Tarot readings', '15 to 60 minutes', 'from about $35', ["anthony-fusco", "casey-deamoira", "damon-stang", "tyler-t-mann-tarot"]),
+           ('Psychic and clairvoyant readings', '15 to 60 minutes', 'from about $35', ["catherine-marks", "rebecca-martinez", "brinly-erin", "andrea-dopewitchkira"]),
+           ('Mediumship', 'varies', 'from about $35', ["lizanne", "sophia-strange", "high-priestess-judith", "catherine-marks"]),
+           ('Astrology', '15 to 60 minutes', 'from about $40; one-hour specialist sessions cost more', ["priya", "casey-deamoira", "alexander-d-santiago", "dainichi-lazuli", "mychal-a-bryan"]),
+           ('Oracle and Lenormand', '15 to 60 minutes', 'from about $35', ["lu-camy", "mallika"]),
+           ('Hypnotherapy and hypnosis', '60 to 75 minutes', 'about $175', ["jennifer-shanteau", "lu-camy"]),
+           ('Energy cleansing', '15 minutes', 'about $44', ["jennifer-shanteau"])]
+    sv = ('<section class="pg"><h1>Sessions at the center</h1><p class="dek">Rates belong to the individual reader and appear on their profile. The figures here are approximate starting points.</p>'
           '<div class="tbl"><table><thead><tr><th>Session</th><th>Length</th><th>Price</th><th>With</th></tr></thead><tbody>'
-          + ''.join(f'<tr><td>{a}</td><td>{b}</td><td>{c}</td><td>{d}</td></tr>' for a, b, c, d in svc) + '</tbody></table></div>'
-          f'<p>Phone sessions are also available with some readers. <a href="{G.PHONE_PAGE}">See phone readings</a>.</p><p><a class="btn" href="{G.BOOK}">Reserve a session</a></p></section>')
+          + ''.join(f'<tr><td>{a}</td><td>{b}</td><td>{c}</td><td>{names(d)}</td></tr>' for a, b, c, d in svc) + '</tbody></table></div>'
+          f'<h2>Remote sessions</h2><p>Some readers take phone sessions: {names([k for k in ORDER if R[k]["phone"]])}. Pick the phone option when you reserve.</p><p><a class="btn" href="/reserve/">Reserve a session</a></p></section>')
     G.add('/sessions/', 'Readings, Astrology & Hypnotherapy Sessions | Psychic Center of New York',
-          'Sessions offered in Namaste\'s reading spaces near Union Square: tarot, psychic, mediumship, astrology, oracle, hypnotherapy and energy cleansing, with typical lengths and prices.', sv,
+          'Sessions at Psychic Center of New York near Union Square: tarot, psychic, mediumship, astrology, oracle, hypnotherapy and energy cleansing, with typical lengths and prices.', sv,
           crumbs=[('Home', '/'), ('Sessions', '/sessions/')])
-    se = (f'<section class="pg"><h1>Schedule and events</h1><h2>Who is working this week</h2><p>Readers set their own days. Namaste Bookshop keeps a live <a href="{G.CALENDAR}">reader calendar</a>, and every booking page shows real open times. '
-          f'Schedules change often, so this site does not copy them.</p><h2>Events</h2><p>No events are listed here right now. When Namaste Bookshop announces a reading event, workshop or special day, it will be posted on namastebookshop.com first. '
-          f'To ask about anything coming up, call {G.PHONE} or email {G.EMAIL}.</p><p><a class="btn" href="{G.CALENDAR}">Open the reader calendar</a></p></section>')
+    se = (f'<section class="pg"><h1>Schedule and events</h1><h2>Who is working this week</h2><p>Readers set their own days, and schedules change often, so we do not print them here. '
+          f'Each reader\'s Reserve button shows their live openings; start from the <a href="/readers/">readers page</a>.</p>'
+          f'<h2>Events</h2><p>No events are listed right now. When the center announces a reading event, workshop or special day, it will appear on this page. '
+          f'To ask about anything coming up, call {G.PHONE} or email {G.EMAIL}.</p></section>')
     G.add('/schedule-and-events/', 'Reader Schedule & Events | Psychic Center of New York',
-          'Where to find who is reading at Namaste Bookshop and the Healing Center each day, and how events are announced.', se,
+          'How to see which Psychic Center of New York readers are working on a given day, and where events will be announced.', se,
           crumbs=[('Home', '/'), ('Schedule and events', '/schedule-and-events/')])
-    vi = (f'<section class="pg"><h1>Plan your visit</h1><div class="two"><article><h2>Bookshop (ground floor)</h2><p>{G.ADDR}</p></article><article><h2>Healing Center (11th floor)</h2><p>{G.HC_STREET}<br>New York, NY 10011</p></article></div>'
+    vi = (f'<section class="pg"><h1>Plan your visit</h1><div class="two"><article><h2>Ground floor</h2><p>Inside Namaste Bookshop<br>{G.ADDR}</p></article><article><h2>Upstairs, 11th floor</h2><p>80 Fifth Avenue, Suite 1104<br>New York, NY 10011</p></article></div>'
           f'<h2>Opening hours</h2><table class="hrs"><tbody>' + ''.join(f'<tr><th>{d}</th><td>{h}</td></tr>' for d, h in G.HOURS) + '</tbody></table><p class="sm">Hours can change on public holidays. Upstairs sessions are by appointment only.</p>'
           f'<h2>Transit</h2><ul><li>Union Square station is the nearest big hub, a few minutes on foot to the east.</li><li>The Sixth Avenue station at 14th Street (PATH included) is about the same distance west.</li></ul>'
-          f'<h2>Arriving for a session</h2><p>Come five minutes early. Downstairs, tell a staff member you have a booking. Upstairs, go straight to Suite 1104.</p>'
+          f'<h2>Arriving for a session</h2><p>Your confirmation names the reader; their profile here says which floor they usually use. Upstairs sessions go straight to Suite 1104.</p>'
           f'<p><a class="btn" href="{G.DIRECTIONS}">Get directions</a> <a class="lnk" href="tel:{G.TEL}">{G.PHONE}</a></p></section>')
     G.add('/visit/', 'Visit: Address, Hours & Transit | Psychic Center of New York',
-          'Addresses for Namaste Bookshop (2 W 14th St) and the Namaste Healing Center (80 Fifth Ave Suite 1104), opening hours, subway lines and check-in tips.', vi,
+          'Find Psychic Center of New York: ground-floor tables at 2 W 14th St and private rooms at 80 Fifth Ave Suite 1104, opening hours, subway and check-in tips.', vi,
           crumbs=[('Home', '/'), ('Visit', '/visit/')])
-    fq = [('Is Psychic Center of New York a separate business?', 'No. It is a guide to the reading spaces of Namaste Bookshop and its Healing Center, both run by the same owners.'),
+    fq = [('Why are the ground-floor tables inside a bookshop?', 'Our downstairs tables are set up inside Namaste Bookshop, which shares an owner with the center. The private rooms are upstairs in Suite 1104.'),
           ('Can I choose which room I sit in?', 'Rooms follow the reader. If you want a private room, book a reader who works upstairs.'),
-          ('Are the rooms private?', 'The Healing Center rooms are closed rooms. The Bookshop spots are inside the open shop.'),
-          ('Do you offer Reiki?', 'Short energy-cleansing sessions are offered now. Ask the shop about other energy work, because practitioner availability changes.'),
+          ('Are the rooms private?', 'The Suite 1104 rooms are closed rooms. The ground-floor tables are inside the open shop.'),
+          ('Do you offer Reiki?', 'Short energy-cleansing sessions are offered now. Ask us about other energy work, because practitioner availability changes.'),
           ('Can someone come in with me?', 'Ask your reader when you book; it is up to them.')]
-    G.add('/faq/', 'Questions About the Reading Rooms | Psychic Center of New York',
-          'Answers about Namaste\'s reading spaces: privacy, choosing a room, energy work, and bringing a friend.',
+    G.add('/faq/', 'Questions About the Center | Psychic Center of New York',
+          'Answers about Psychic Center of New York: the ground-floor tables, private rooms, choosing a room, energy work, and bringing a friend.',
           '<section class="pg"><h1>Questions about the center</h1><dl class="faq">' + ''.join(f'<dt>{q}</dt><dd>{a}</dd>' for q, a in fq) + '</dl></section>',
           ld=[G.faq_ld(fq)], crumbs=[('Home', '/'), ('FAQ', '/faq/')])
-    G.add('/about/', 'About Psychic Center of New York', 'Psychic Center of New York is a Wealth Edge Ventures Inc. guide to the reading spaces of Namaste Bookshop.',
-          f'<section class="pg"><h1>About this site</h1><p>Wealth Edge Ventures Inc., owner of both Namaste Bookshop and the Namaste Healing Center, publishes this site. '
-          f'It describes the spaces, sessions and practical details of visiting. All bookings are handled by Namaste Bookshop.</p><p>Reader information comes from namastebookshop.com and from the shop itself. We do not post reviews or ratings here.</p>'
+    G.add('/about/', 'About Psychic Center of New York', 'Psychic Center of New York is a reading center at Fifth Avenue and 14th Street, operated by Wealth Edge Ventures Inc.',
+          f'<section class="pg"><h1>About Psychic Center of New York</h1><p>Psychic Center of New York is a reading center with tables on the ground floor inside Namaste Bookshop, {G.ADDR}, and private rooms upstairs at 80 Fifth Avenue, Suite 1104. '
+          f'It is operated by Wealth Edge Ventures Inc., which also owns Namaste Bookshop.</p><p>Reader profiles are based on each reader\'s own listing. We do not post reviews or ratings.</p>'
           f'<p><a href="tel:{G.TEL}">{G.PHONE}</a> &middot; <a href="mailto:{G.EMAIL}">{G.EMAIL}</a></p></section>', crumbs=[('Home', '/'), ('About', '/about/')])
     G.add('/privacy/', 'Privacy | Psychic Center of New York', 'Analytics and booking privacy on psychiccenterofnewyork.com.',
-          '<section class="pg">' + G.privacy('psychiccenterofnewyork.com is an information site about a physical place. It has no sign-up and takes no payments.') + '</section>',
+          '<section class="pg">' + G.privacy('psychiccenterofnewyork.com is an information and booking site. It has no sign-up and takes no payments itself.') + '</section>',
           crumbs=[('Home', '/'), ('Privacy', '/privacy/')])
 
 NOTFOUND_DESC = 'Page not found on psychiccenterofnewyork.com.'
 NOTFOUND = '<section class="pg"><h1>No such room</h1><p>This page is not in the building. Try the <a href="/">directory</a> or <a href="/visit/">visit info</a>.</p></section>'
 
-CSS = """:root{--navy:#14284b;--brass:#b08d57;--stone:#f2efe8;--ink:#1b2130}
+CSS = """.tiles{list-style:none;padding:0;display:grid;gap:10px}@media(min-width:700px){.tiles{grid-template-columns:1fr 1fr}}.tiles a{display:flex;gap:12px;background:#fff;padding:12px;text-decoration:none;color:var(--ink);border-left:4px solid var(--brass)}.tiles img{object-fit:cover;flex:none}.tiles span{display:flex;flex-direction:column}.tiles b{color:var(--navy);font-family:'Playfair Display',serif}.tiles em{font-style:normal;color:#8a6d3e;font-weight:700;font-size:.88rem}
+.rp{display:grid;gap:16px}@media(min-width:640px){.rp{grid-template-columns:200px 1fr;align-items:center}}.rp img{width:200px;height:200px;object-fit:cover;border:4px solid var(--brass)}.rp h1{margin-top:0}
+dl.svc{display:grid;grid-template-columns:auto 1fr;gap:6px 14px;background:#fff;padding:14px;border-top:3px solid var(--navy)}dl.svc dt{font-weight:700;color:var(--navy)}dl.svc dd{margin:0}
+:root{--navy:#14284b;--brass:#b08d57;--stone:#f2efe8;--ink:#1b2130}
 *{box-sizing:border-box}body{margin:0;background:var(--stone);color:var(--ink);font:16.5px/1.65 Karla,system-ui,sans-serif}a{color:#1f4f8f}
 h1,h2{font-family:'Playfair Display',Georgia,serif;line-height:1.15;color:var(--navy)}h1{font-size:clamp(2rem,7vw,3.1rem);font-weight:800;margin:.2em 0 .35em}
 .skip{position:absolute;left:-999px}.skip:focus{left:6px;top:6px;background:#fff;padding:6px}

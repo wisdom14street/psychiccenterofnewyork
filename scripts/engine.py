@@ -30,18 +30,17 @@ C = None
 def ldjson(o): return '<script type="application/ld+json">' + json.dumps(o, ensure_ascii=False).replace('</', '<\\/') + '</script>'
 ADDRESS_LD = {'@type': 'PostalAddress', 'streetAddress': STREET, 'addressLocality': CITY, 'addressRegion': REGION, 'postalCode': ZIP, 'addressCountry': 'US'}
 def org_ld():
-    o = {'@context': 'https://schema.org', '@type': 'Organization', '@id': SITE + '/#org', 'name': BRAND, 'url': SITE + '/', 'logo': SITE + '/icon-512.png',
-         'description': C.ORG_DESC, 'email': EMAIL, 'telephone': '+1-212-645-0141',
+    o = {'@context': 'https://schema.org', '@type': C.BUSINESS_TYPE, '@id': SITE + '/#business', 'name': BRAND, 'url': SITE + '/', 'logo': SITE + '/icon-512.png',
+         'image': SITE + '/og.jpg', 'description': C.ORG_DESC, 'email': EMAIL, 'telephone': '+1-212-645-0141', 'priceRange': '$$',
+         'address': getattr(C, 'ADDRESS_LD', ADDRESS_LD), 'geo': {'@type': 'GeoCoordinates', 'latitude': GEO[0], 'longitude': GEO[1]},
+         'openingHoursSpecification': HOURS_LD, 'hasMap': MAPS,
          'parentOrganization': {'@type': 'Organization', 'name': 'Wealth Edge Ventures Inc.'},
-         'sameAs': [], 'brand': {'@type': 'Brand', 'name': BRAND}}
-    o.pop('sameAs')
+         'containedInPlace': {'@type': 'BookStore', 'name': 'Namaste Bookshop', 'address': ADDRESS_LD}}
+    o.update(getattr(C, 'ORG_EXTRA', {}))
     return o
 def shop_ld(kind=None):
-    o = {'@context': 'https://schema.org', '@type': kind or C.BUSINESS_TYPE, '@id': SHOP + '/#store', 'name': 'Namaste Bookshop', 'url': SHOP + '/',
-         'telephone': '+1-212-645-0141', 'email': EMAIL, 'address': ADDRESS_LD, 'image': SITE + '/og.jpg',
-         'geo': {'@type': 'GeoCoordinates', 'latitude': GEO[0], 'longitude': GEO[1]}, 'openingHoursSpecification': HOURS_LD,
-         'hasMap': MAPS, 'parentOrganization': {'@type': 'Organization', 'name': 'Wealth Edge Ventures Inc.'}}
-    return o
+    """WebSite node for the home page (kept under the old name so site modules need no change)."""
+    return {'@context': 'https://schema.org', '@type': 'WebSite', '@id': SITE + '/#website', 'name': BRAND, 'url': SITE + '/', 'publisher': {'@id': SITE + '/#business'}}
 def crumbs_ld(trail):
     return {'@context': 'https://schema.org', '@type': 'BreadcrumbList', 'itemListElement': [
         {'@type': 'ListItem', 'position': i + 1, 'name': n, 'item': SITE + p} for i, (n, p) in enumerate(trail)]}
@@ -103,19 +102,58 @@ def buy_url(x):
     return f"{SHOP}/cart/{x['v']}:1?{q}"
 def img(u, w): return re.sub(r'([?&])width=\d+', '', u) + ('&' if '?' in u else '?') + f'width={w}'
 def money(p): return f'${p:,.2f}'
+def p_ld(x):
+    u = f"{SITE}/products/{x['h']}/"
+    pr = {'@context': 'https://schema.org', '@type': 'Product', 'name': x['t'], 'image': img(x['img'], 800), 'url': u,
+          'brand': {'@type': 'Brand', 'name': x['vendor']}, 'sku': x['sku'] or str(x['v']),
+          'offers': {'@type': 'Offer', 'price': f"{x['p']:.2f}", 'priceCurrency': 'USD', 'availability': 'https://schema.org/InStock', 'url': u,
+                     'itemCondition': 'https://schema.org/NewCondition', 'seller': {'@id': SITE + '/#business'}}}
+    if x['gtin']: pr['gtin'] = x['gtin']
+    return pr
 def product_ld(items, name):
-    lst = []
-    for i, x in enumerate(items):
-        pr = {'@type': 'Product', 'name': x['t'], 'image': img(x['img'], 600), 'url': f"{SHOP}/products/{x['h']}",
-              'brand': {'@type': 'Brand', 'name': x['vendor']}, 'sku': x['sku'] or str(x['v']),
-              'offers': {'@type': 'Offer', 'price': f"{x['p']:.2f}", 'priceCurrency': 'USD', 'availability': 'https://schema.org/InStock',
-                         'url': f"{SHOP}/products/{x['h']}", 'seller': {'@type': 'Organization', 'name': 'Namaste Bookshop'}}}
-        if x['gtin']: pr['gtin'] = x['gtin']
-        lst.append({'@type': 'ListItem', 'position': i + 1, 'item': pr})
-    return {'@context': 'https://schema.org', '@type': 'ItemList', 'name': name, 'itemListElement': lst}
-def buy_attrs(x, cat=''):
-    return (f'href="{E(buy_url(x))}" rel="nofollow" data-buy data-v="{x["v"]}" data-t="{E(x["t"])}" data-p="{x["p"]:.2f}" data-c="{E(cat)}"')
-
+    return {'@context': 'https://schema.org', '@type': 'ItemList', 'name': name, 'itemListElement': [
+        {'@type': 'ListItem', 'position': i + 1, 'url': f"{SITE}/products/{x['h']}/", 'name': x['t']} for i, x in enumerate(items)]}
+CATALOG = {}
+def _cat(x, cat):
+    CATALOG.setdefault(x['h'], {'h': x['h'], 't': x['t'], 'p': x['p'], 'v': x['v'], 'i': img(x['img'], 400), 'c': cat, 'k': cat, 'r': len(CATALOG), 'x': False})
+def atc(x, cat, label='Add to cart', cls='atc', ident=False):
+    _cat(x, cat)
+    return (f'<button type="button" class="{cls}"' + (' id="buy"' if ident else '') + f' data-atc data-v="{x["v"]}" data-h="{E(x["h"])}" data-t="{E(x["t"])}" '
+            f'data-p="{x["p"]:.2f}" data-i="{E(img(x["img"], 400))}" data-c="{E(cat)}" data-k="{E(cat)}" aria-label="Add {E(x["t"])} to cart">{label}</button>')
+def buy_attrs(x, cat=''):  # product cards now link to the on-site product page
+    _cat(x, cat)
+    return f'href="/products/{E(x["h"])}/"'
+def product_pages(items, cat, shelf_name, shelf_path, crumbs_root):
+    for x in items:
+        _cat(x, cat)
+        add(f"/products/{x['h']}/", f"{x['t']} | {BRAND}", C.product_desc(x, shelf_name), C.product_body(x, cat, shelf_name, shelf_path), ld=[p_ld(x)],
+            crumbs=crumbs_root + [(shelf_name, shelf_path), (x['t'], f"/products/{x['h']}/")])
+CART_ICON = '<svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 8h14l-1.2 11.2a2 2 0 0 1-2 1.8H8.2a2 2 0 0 1-2-1.8z"/><path d="M9 8V6.5a3 3 0 0 1 6 0V8"/></svg>'
+def cart_button():
+    return f'<a class="cartbtn" href="/cart/" data-cart-open aria-label="Cart">{CART_ICON}<span class="cartn" data-cart-count hidden>0</span></a>'
+def cart_boot():
+    cfg = json.dumps({'shop': SHOP, 'shopName': 'namastebookshop.com', 'attr': '?attributes%5BStorefront%5D=' + urllib.parse.quote(DOMAIN), 'brand': BRAND, 'domain': DOMAIN,
+                      'ref': DOMAIN.split('.')[0], 'pickup': False, 'ready': '', 'street': STREET, 'addr': ADDR, 'pair': {}, 'pairTitle': getattr(C, 'PAIR_TITLE', 'Often added too'),
+                      'shopPath': getattr(C, 'SHOP_PATH', '/shop/')}).replace('</', '<\\/')
+    return (f'<div class="cdim" data-cart-close hidden></div><aside id="cart" class="cdrawer" role="dialog" aria-modal="true" aria-labelledby="ctitle" hidden>'
+            f'<div class="chead"><h2 id="ctitle">Your cart</h2><button type="button" class="cx" data-cart-close aria-label="Close cart">&times;</button></div>'
+            f'<p class="cmsg" id="cmsg" role="status" aria-live="polite"></p><div class="cbody" data-cart-body></div></aside>'
+            f'<script>window.NI_CART={cfg}</script><script src="/assets/cart.js" defer></script>')
+_R = None
+def readers():
+    global _R
+    if _R is None: _R = json.load(open(os.path.join(ROOT, 'site', 'readers.json')))
+    return _R
+def services_list(k, fmt):
+    sv = readers()[k].get('services') or []
+    if fmt == 'table': return '<table class="svc"><tbody>' + ''.join(f'<tr><td>{E(a) or "Session"}</td><td>{E(b)}</td></tr>' for a, b in sv) + '</tbody></table>'
+    if fmt == 'dl': return '<dl class="svc">' + ''.join(f'<dt>{E(b)}</dt><dd>{E(a) or "Session"}</dd>' for a, b in sv) + '</dl>'
+    if fmt == 'chips': return '<ul class="svc">' + ''.join(f'<li><b>{E(b)}</b> {E(a)}</li>' for a, b in sv) + '</ul>'
+    return '<p class="svc">' + ' &middot; '.join(f'{E(a)}: {E(b)}' for a, b in sv) + '</p>'
+def person_ld(k, path):
+    r = readers()[k]
+    return {'@context': 'https://schema.org', '@type': 'Person', 'name': r['name'], 'image': r['img'], 'url': SITE + path, 'jobTitle': r.get('spec', ''),
+            'worksFor': {'@id': SITE + '/#business'}}
 # ---------- page assembly ----------
 PAGES = []
 def add(path, title, desc, body, ld=(), crumbs=None, nav=None, robots=None, sitemap=True, ogimg='/og.jpg'):
@@ -138,9 +176,9 @@ def render(pg):
             f'<meta property="og:image:width" content="1200"><meta property="og:image:height" content="630"><meta name="twitter:card" content="summary_large_image">'
             f'<meta name="theme-color" content="{C.THEME_COLOR}"><link rel="icon" href="/favicon.svg" type="image/svg+xml"><link rel="apple-touch-icon" href="/apple-touch-icon.png">'
             + (f'<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="{C.FONTS}">' if C.FONTS else '')
-            + '<link rel="stylesheet" href="/assets/site.css">' + ''.join(ldjson(x) for x in ld) + '</head>')
+            + ('<link rel="stylesheet" href="/assets/cart.css">' if getattr(C, 'CART', False) else '') + '<link rel="stylesheet" href="/assets/site.css">' + ''.join(ldjson(x) for x in ld) + '</head>')
     body = C.shell(pg)
-    tail = '<script src="/assets/ga.js" defer></script><script src="/assets/buy.js" defer></script>' if ga_head() else ''
+    tail = (cart_boot() if getattr(C, 'CART', False) else '') + ('<script src="/assets/ga.js" defer></script>' if ga_head() else '')
     return head + body.replace('</body>', tail + '</body>') if '</body>' in body else head + body + tail + '</body></html>'
 def write(path, s):
     f = os.path.join(ROOT, 'dist', path.lstrip('/'))
@@ -157,7 +195,9 @@ def build():
     nf = dict(path='/404.html', title=f'Page not found | {BRAND}', desc=C.NOTFOUND_DESC, body=C.NOTFOUND, ld=[], crumbs=None, nav=None, robots='noindex', sitemap=False, ogimg='/og.jpg')
     open(os.path.join(dist, '404.html'), 'w').write(render(nf))
     open(os.path.join(dist, 'assets', 'site.css'), 'w').write(C.CSS)
-    for f in ('ga.js', 'buy.js'): shutil.copy(os.path.join(ROOT, 'scripts', f), os.path.join(dist, 'assets', f))
+    for f in ('ga.js', 'cart.js', 'cart.css'): shutil.copy(os.path.join(ROOT, 'scripts', f), os.path.join(dist, 'assets', f))
+    if CATALOG:
+        os.makedirs(os.path.join(dist, 'data'), exist_ok=True); json.dump(list(CATALOG.values()), open(os.path.join(dist, 'data', 'catalog.json'), 'w'))
     st = os.path.join(ROOT, 'static')
     if os.path.isdir(st):
         for f in os.listdir(st): shutil.copy(os.path.join(st, f), os.path.join(dist, f))
@@ -173,11 +213,11 @@ def build():
     open(os.path.join(dist, 'llms.txt'), 'w').write('\n'.join(ll) + '\n')
     print(f'built {len(PAGES)} pages + 404 into dist/ for {SITE}')
 def privacy(intro, products=False):
-    shop = ('<h2>Buying something</h2><p>Buy buttons on this site open the Namaste Bookshop checkout at namastebookshop.com, which is run on Shopify. '
+    shop = ('<h2>Buying something</h2><p>Your cart is kept in this browser. When you press Check out, it is handed to a secure Shopify checkout run by Namaste Bookshop (namastebookshop.com), which fills orders for this site. '
             'The order is tagged with this site\'s name so the shop knows where it came from. Payment, shipping and pickup details are collected there, under the '
-            f'<a href="{SHOP}/policies/privacy-policy">namastebookshop.com privacy policy</a>.</p>') if products else ''
+            'privacy policy shown at checkout.</p>') if products else ''
     return (f'<h1>Privacy</h1><p>{intro}</p><h2>Analytics</h2><p>This site uses Google Analytics to count visits and see which pages are viewed and which '
             'links are tapped, such as booking, call or directions links. Google may set cookies to do this. You can block these with your browser settings or an '
-            'ad blocker, and the site will still work.</p><h2>Bookings</h2><p>Reading appointments are booked on Square, the scheduling service Namaste Bookshop uses. '
+            'ad blocker, and the site will still work.</p><h2>Bookings</h2><p>Reading appointments are booked on Square, the scheduling service our readers use. '
             'Anything you enter there is handled by Square and Namaste Bookshop, not stored by this site.</p>' + shop +
             f'<h2>Contact</h2><p>Questions about your data: {EMAIL} or {PHONE}. {BRAND} is run by Wealth Edge Ventures Inc., {ADDR}.</p><p class="small">Updated {TODAY}.</p>')

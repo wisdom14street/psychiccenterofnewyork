@@ -6,7 +6,34 @@
   "profile": "https://namastebookshop.com/pages/alexander-d-santiago",
   "home": "bookshop",
   "phone": false,
-  "img": "https://cdn.shopify.com/s/files/1/0663/5329/9534/files/alexander.jpg?v=1788765744"
+  "img": "https://cdn.shopify.com/s/files/1/0663/5329/9534/files/alexander.jpg?v=1788765744",
+  "services": [
+   [
+    "Tarot 15 min",
+    "$40"
+   ],
+   [
+    "30 min",
+    "$70"
+   ],
+   [
+    "45 min",
+    "$100"
+   ],
+   [
+    "60 min",
+    "$130"
+   ],
+   [
+    "Western astrology + flower essences",
+    "$75"
+   ],
+   [
+    "Vedic astrology + gemstones / mantra",
+    "$75"
+   ]
+  ],
+  "spec": "Western & Vedic astrology \u00b7 tarot \u00b7 flower essences"
  },
  "andrea-dopewitchkira": {
   "name": "Andrea (DopeWitchKira)",
@@ -15,7 +42,38 @@
   "profile": "https://namastebookshop.com/pages/andrea-dopewitchkira",
   "home": "bookshop",
   "phone": true,
-  "img": "https://cdn.shopify.com/s/files/1/0663/5329/9534/files/andrea.jpg?v=1788766030"
+  "img": "https://cdn.shopify.com/s/files/1/0663/5329/9534/files/andrea.jpg?v=1788766030",
+  "services": [
+   [
+    "Tarot 15 min",
+    "$35"
+   ],
+   [
+    "30 min",
+    "$70"
+   ],
+   [
+    "45 min",
+    "$100"
+   ],
+   [
+    "60 min",
+    "$130"
+   ],
+   [
+    "Witch Talk 20 min",
+    "$50"
+   ],
+   [
+    "40 min",
+    "$100"
+   ],
+   [
+    "60 min",
+    "$150"
+   ]
+  ],
+  "spec": "11 years of tarot \u00b7 clairvoyant \u00b7 Witch Talk"
  },
  "anthony-fusco": {
   "name": "Anthony Fusco",
@@ -24,7 +82,26 @@
   "profile": "https://namastebookshop.com/pages/anthony-fusco",
   "home": "upstairs",
   "phone": true,
-  "img": "https://cdn.shopify.com/s/files/1/0663/5329/9534/files/anthony.jpg?v=1788765994"
+  "img": "https://cdn.shopify.com/s/files/1/0663/5329/9534/files/anthony.jpg?v=1788765994",
+  "services": [
+   [
+    "15 min",
+    "$35"
+   ],
+   [
+    "30 min",
+    "$70"
+   ],
+   [
+    "45 min",
+    "$100"
+   ],
+   [
+    "60 min",
+    "$130"
+   ]
+  ],
+  "spec": "Voyager Tarot \u00b7 25 years \u00b7 business & love timelines"
  },
  "brinly-erin": {
   "name": "Brinly Erin",
@@ -33,7 +110,26 @@
   "profile": "https://namastebookshop.com/pages/brinly-erin",
   "home": "bookshop",
   "phone": false,
-  "img": "https://cdn.shopify.com/s/files/1/0663/5329/9534/files/brinly.webp?v=1788766018"
+  "img": "https://cdn.shopify.com/s/files/1/0663/5329/9534/files/brinly.webp?v=1788766018",
+  "services": [
+   [
+    "15 min",
+    "$35"
+   ],
+   [
+    "30 min",
+    "$70"
+   ],
+   [
+    "45 min",
+    "$100"
+   ],
+   [
+    "60 min",
+    "$130"
+   ]
+  ],
+  "spec": "Clairvoyant & clairaudient \u00b7 feminine mysticism"
  },
  "casey-deamoira": {
   "name": "Casey Deamoira",
@@ -42,7 +138,26 @@
   "profile": "https://namastebookshop.com/pages/casey-deamoira",
   "home": "upstairs",
   "phone": false,
-  "img": "https://cdn.shopify.com/s/files/1/0663/5329/9534/files/casey.jpg?v=1788766290"
+  "img": "https://cdn.shopify.com/s/files/1/0663/5329/9534/files/casey.jpg?v=1788766290",
+  "services": [
+   [
+    "15 min",
+    "$35"
+   ],
+   [
+    "30 min",
+    "$70"
+   ],
+   [
+    "45 min",
+    "$100"
+   ],
+   [
+    "60 min",
+    "$130"
+   ]
+  ],
+  "spec": "Thoth tarot \u00b7 Hellenistic astrology"
  },
  "catherine-marks": {
   "name": "Catherine Marks",
@@ -51,7 +166,26 @@
   "profile": "https://namastebookshop.com/pages/catherine-marks",
   "home": "upstairs",
   "phone": true,
-  "img": "https://cdn.shopify.com/s/files/1/0663/5329/9534/files/catherine.jpg?v=1788766439"
+  "img": "https://cdn.shopify.com/s/files/1/0663/5329/9534/files/catherine.jpg?v=1788766439",
+  "services": [
+   [
+    "Psychic tarot 15 min",
+    "$35"
+   ],
+   [
+    "30 min",
+    "$70"
+   ],
+   [
+    "45 min",
+    "$100"
+   ],
+   [
+    "60 min",
+    "$130"
+   ]
+  ],
+  "spec": "Clairvoyant dimensional coach \u00b7 channel \u00b7 medium"
  },
  "dainichi-lazuli": {
   "name": "Dainichi Lazuli",
@@ -60,7 +194,14 @@
   "profile": "https://namastebookshop.com/pages/dainichi-lazuli",
   "home": "upstairs",
   "phone": false,
-  "img": "https://cdn.shopify.com/s/files/1/0663/5329/9534/files/dainichi-lazuli-tarot-readings.jpg?v=1790898346"
+  "img": "https://cdn.shopify.com/s/files/1/0663/5329/9534/files/dainichi-lazuli-tarot-readings.jpg?v=1790898346",
+  "services": [
+   [
+    "Per 15 minutes",
+    "$40"
+   ]
+  ],
+  "spec": "Tarot \u00b7 Vedic astrology \u00b7 crystals \u00b7 runes \u00b7 numerology"
  },
  "damon-stang": {
   "name": "Damon Stang",
@@ -69,7 +210,26 @@
   "profile": "https://namastebookshop.com/pages/damon-stang",
   "home": "upstairs",
   "phone": true,
-  "img": "https://cdn.shopify.com/s/files/1/0663/5329/9534/files/damon.jpg?v=1788766454"
+  "img": "https://cdn.shopify.com/s/files/1/0663/5329/9534/files/damon.jpg?v=1788766454",
+  "services": [
+   [
+    "15 min",
+    "$35"
+   ],
+   [
+    "30 min",
+    "$70"
+   ],
+   [
+    "45 min",
+    "$100"
+   ],
+   [
+    "60 min",
+    "$130"
+   ]
+  ],
+  "spec": "Master tarot \u00b7 folk magic \u00b7 High Priest"
  },
  "high-priestess-judith": {
   "name": "High Priestess Judith",
@@ -78,7 +238,26 @@
   "profile": "https://namastebookshop.com/pages/high-priestess-judith",
   "home": "upstairs",
   "phone": false,
-  "img": "https://cdn.shopify.com/s/files/1/0663/5329/9534/files/judith.jpg?v=1788766487"
+  "img": "https://cdn.shopify.com/s/files/1/0663/5329/9534/files/judith.jpg?v=1788766487",
+  "services": [
+   [
+    "15 min",
+    "$35"
+   ],
+   [
+    "30 min",
+    "$70"
+   ],
+   [
+    "45 min",
+    "$100"
+   ],
+   [
+    "60 min",
+    "$130"
+   ]
+  ],
+  "spec": "La Gitana \u00b7 tarot, astrology, mediumship, love"
  },
  "jennifer-shanteau": {
   "name": "Jennifer Shanteau",
@@ -87,7 +266,18 @@
   "profile": "https://namastebookshop.com/pages/jennifer-shanteau",
   "home": "upstairs",
   "phone": false,
-  "img": "https://cdn.shopify.com/s/files/1/0663/5329/9534/files/jennifer-shanteau-hypnotherapy-energy-work.jpg?v=1790785568"
+  "img": "https://cdn.shopify.com/s/files/1/0663/5329/9534/files/jennifer-shanteau-hypnotherapy-energy-work.jpg?v=1790785568",
+  "services": [
+   [
+    "Hypnotherapy 75 min",
+    "$175"
+   ],
+   [
+    "Energy Cleansing 15 min",
+    "$44"
+   ]
+  ],
+  "spec": "Hypnotherapy & energy work"
  },
  "lizanne": {
   "name": "Lizanne",
@@ -96,7 +286,26 @@
   "profile": "https://namastebookshop.com/pages/lizanne",
   "home": "bookshop",
   "phone": false,
-  "img": "https://cdn.shopify.com/s/files/1/0663/5329/9534/files/lizanne.jpg?v=1788766475"
+  "img": "https://cdn.shopify.com/s/files/1/0663/5329/9534/files/lizanne.jpg?v=1788766475",
+  "services": [
+   [
+    "15 min",
+    "$35"
+   ],
+   [
+    "30 min",
+    "$70"
+   ],
+   [
+    "45 min",
+    "$100"
+   ],
+   [
+    "60 min",
+    "$130"
+   ]
+  ],
+  "spec": "Intuitive medium \u00b7 10 years \u00b7 Everyday Art Cards"
  },
  "lu-camy": {
   "name": "Lu Camy",
@@ -105,7 +314,30 @@
   "profile": "https://namastebookshop.com/pages/lu-camy",
   "home": "both",
   "phone": false,
-  "img": "https://cdn.shopify.com/s/files/1/0663/5329/9534/files/lu-camy-oracle-readings.png?v=1791481033"
+  "img": "https://cdn.shopify.com/s/files/1/0663/5329/9534/files/lu-camy-oracle-readings.png?v=1791481033",
+  "services": [
+   [
+    "Oracle Reading \u00b7 15 min",
+    "$35"
+   ],
+   [
+    "Oracle Reading \u00b7 30 min",
+    "$70"
+   ],
+   [
+    "Oracle Reading \u00b7 45 min",
+    "$100"
+   ],
+   [
+    "Oracle Reading \u00b7 60 min",
+    "$130"
+   ],
+   [
+    "Hypnosis \u00b7 60 min",
+    "$175"
+   ]
+  ],
+  "spec": "Oracle creator \u00b7 clinical hypnotist \u00b7 author & illustrator"
  },
  "mallika": {
   "name": "Mallika",
@@ -114,7 +346,26 @@
   "profile": "https://namastebookshop.com/pages/mallika",
   "home": "upstairs",
   "phone": false,
-  "img": "https://cdn.shopify.com/s/files/1/0663/5329/9534/files/moxie.jpg?v=1788833994"
+  "img": "https://cdn.shopify.com/s/files/1/0663/5329/9534/files/moxie.jpg?v=1788833994",
+  "services": [
+   [
+    "15 min",
+    "$35"
+   ],
+   [
+    "30 min",
+    "$70"
+   ],
+   [
+    "45 min",
+    "$100"
+   ],
+   [
+    "60 min",
+    "$130"
+   ]
+  ],
+  "spec": "Lenormand + tarot \u00b7 the what and the why"
  },
  "mychal-a-bryan": {
   "name": "Mychal A. Bryan",
@@ -123,7 +374,18 @@
   "profile": "https://namastebookshop.com/pages/mychal-a-bryan",
   "home": "remote",
   "phone": false,
-  "img": "https://cdn.shopify.com/s/files/1/0663/5329/9534/files/mychal.png?v=1788766419"
+  "img": "https://cdn.shopify.com/s/files/1/0663/5329/9534/files/mychal.png?v=1788766419",
+  "services": [
+   [
+    "Qabalistic Tarot, 1 hour",
+    "$270"
+   ],
+   [
+    "Natal, predictive, or medical astrology, 1 hour",
+    "$360"
+   ]
+  ],
+  "spec": "World-renowned Bahamian-Jamaican astrologer \u00b7 Qabalistic tarot"
  },
  "priya": {
   "name": "Priya",
@@ -132,7 +394,42 @@
   "profile": "https://namastebookshop.com/pages/priya",
   "home": "bookshop",
   "phone": false,
-  "img": "https://cdn.shopify.com/s/files/1/0663/5329/9534/files/priya.webp?v=1788766409"
+  "img": "https://cdn.shopify.com/s/files/1/0663/5329/9534/files/priya.webp?v=1788766409",
+  "services": [
+   [
+    "Tarot 15 min",
+    "$40"
+   ],
+   [
+    "30 min",
+    "$80"
+   ],
+   [
+    "45 min",
+    "$110"
+   ],
+   [
+    "60 min",
+    "$140"
+   ],
+   [
+    "Astrology 15 min",
+    "$65"
+   ],
+   [
+    "30 min",
+    "$100"
+   ],
+   [
+    "45 min",
+    "$150"
+   ],
+   [
+    "60 min",
+    "$190"
+   ]
+  ],
+  "spec": "3rd-generation astrologer \u00b7 20+ years \u00b7 Chiron specialist"
  },
  "rebecca-martinez": {
   "name": "Rebecca Martinez",
@@ -141,7 +438,26 @@
   "profile": "https://namastebookshop.com/pages/rebecca-martinez",
   "home": "upstairs",
   "phone": true,
-  "img": "https://cdn.shopify.com/s/files/1/0663/5329/9534/files/rebecca.jpg?v=1788766400"
+  "img": "https://cdn.shopify.com/s/files/1/0663/5329/9534/files/rebecca.jpg?v=1788766400",
+  "services": [
+   [
+    "15 min",
+    "$35"
+   ],
+   [
+    "30 min",
+    "$70"
+   ],
+   [
+    "45 min",
+    "$100"
+   ],
+   [
+    "60 min",
+    "$130"
+   ]
+  ],
+  "spec": "Psychic & clairaudient tarot reader \u00b7 English & Spanish"
  },
  "sophia-strange": {
   "name": "Sophia Strange",
@@ -150,7 +466,26 @@
   "profile": "https://namastebookshop.com/pages/sophia-strange",
   "home": "bookshop",
   "phone": false,
-  "img": "https://cdn.shopify.com/s/files/1/0663/5329/9534/files/sophia.jpg?v=1788766391"
+  "img": "https://cdn.shopify.com/s/files/1/0663/5329/9534/files/sophia.jpg?v=1788766391",
+  "services": [
+   [
+    "15 min",
+    "$35"
+   ],
+   [
+    "30 min",
+    "$70"
+   ],
+   [
+    "45 min",
+    "$100"
+   ],
+   [
+    "60 min",
+    "$140"
+   ]
+  ],
+  "spec": "Mystic, poet & psychic medium \u00b7 a poem to take home"
  },
  "tyler-t-mann-tarot": {
   "name": "Tyler T-Mann Tarot",
@@ -159,6 +494,25 @@
   "profile": "https://namastebookshop.com/pages/tyler-t-mann-tarot",
   "home": "bookshop",
   "phone": false,
-  "img": "https://cdn.shopify.com/s/files/1/0663/5329/9534/files/tmann.jpg?v=1788766381"
+  "img": "https://cdn.shopify.com/s/files/1/0663/5329/9534/files/tmann.jpg?v=1788766381",
+  "services": [
+   [
+    "15 min",
+    "$40"
+   ],
+   [
+    "30 min",
+    "$75"
+   ],
+   [
+    "45 min",
+    "$105"
+   ],
+   [
+    "60 min",
+    "$135"
+   ]
+  ],
+  "spec": "Queer NYC tarot reader & motivational coach"
  }
 }
