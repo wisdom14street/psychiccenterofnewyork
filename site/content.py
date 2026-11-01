@@ -15,7 +15,53 @@ DOWN = ['alexander-d-santiago', 'andrea-dopewitchkira', 'priya', 'tyler-t-mann-t
 PLACES = [{'@type': 'Place', 'name': 'Ground-floor reading tables, inside Namaste Bookshop', 'address': G.ADDRESS_LD},
           {'@type': 'Place', 'name': 'Suite 1104 private rooms (Namaste Healing Center)', 'address': {'@type': 'PostalAddress', 'streetAddress': '80 Fifth Avenue, Suite 1104', 'addressLocality': 'New York', 'addressRegion': 'NY', 'postalCode': '10011', 'addressCountry': 'US'}}]
 ORG_EXTRA = {'location': PLACES}
-NAV = [('/readers/', 'Readers'), ('/bookshop-floor/', 'Ground floor'), ('/healing-center/', 'Suite 1104'), ('/sessions/', 'Sessions'), ('/schedule-and-events/', 'Schedule'), ('/visit/', 'Visit'), ('/faq/', 'FAQ')]
+NAV = [('/readers/', 'Readers'), ('/bookshop-floor/', 'Ground floor'), ('/healing-center/', 'Suite 1104'), ('/sessions/', 'Sessions'), ('/schedule-and-events/', 'Schedule'), ('/supplies/', 'Supplies'), ('/visit/', 'Visit'), ('/faq/', 'FAQ')]
+CART = True
+SHOP_PATH = '/supplies/'
+import re
+import minishop as MS
+COLLECTIONS = []
+STYLES = []
+KINDS = {'cloth': ('Reading cloth', 'Reading cloths'), 'bag': ('Deck bag', 'Deck bags & pouches'), 'box': ('Deck box', 'Deck boxes'), 'stand': ('Card stand', 'Card stands'),
+         'talisman': ('Talisman', 'Talismans'), 'journal': ('Journal', 'Journals'), 'bowl': ('Singing bowl', 'Singing bowls'), 'bell': ('Bell or chime', 'Bells & tingshas'),
+         'sage': ('Smudge bundle', 'Sage & smudge'), 'mist': ('Cleansing spray', 'Cleansing sprays & waters')}
+def SELECT(p, C):
+    t = p['title']; ty = (p.get('product_type') or '').strip(); tl = t.lower()
+    if re.search(r'wholesale|display of \d+|gift card', tl): return None
+    if re.search(r'altar cloth|tarot cloth|reading cloth', tl): return 'cloth'
+    if re.search(r'card (holder|stand)|tarot (holder|stand)|deck stand|card easel', tl): return 'stand'
+    if ty in ('Bag', 'Bags & Pouches') and not re.search(r'paper carry', tl): return 'bag'
+    if re.search(r'\b(pouch|bag)\b', tl) and re.search(r'tarot|velvet', tl) and ty not in ('books', 'Book', 'Tarot Deck', 'Oracle Cards', 'Oracle Deck', 'Sage'): return 'bag'
+    if ty == 'Wood Storage Box' and not re.search(r'bowl', tl): return 'box'
+    if ty in ('Tarot Talisman', 'Tarot Accessories'): return 'talisman'
+    if ty in ('Journal', 'Journals'): return 'journal'
+    if ty == 'Singing Bowl': return 'bowl'
+    if ty in ('Hand Bells',): return 'bell'
+    if ty == 'Sage': return 'sage'
+    if ty in ('Smudge Sprays Fine Mists', 'Cleansing Water'): return 'mist'
+    return None
+SHELVES = [('reading-table', '/supplies/reading-table/', ('cloth', 'stand', 'talisman'), 'Reading table', 'Reading Cloths, Card Stands and Talismans',
+            'What sits on the table during a session: a cloth for the spread, a stand to hold a card up, and a small talisman or two.'),
+           ('deck-care', '/supplies/deck-care/', ('bag', 'box'), 'Deck care', 'Deck Bags, Pouches and Boxes',
+            'Velvet and cotton pouches and carved wooden boxes for keeping a deck safe between readings.'),
+           ('journals', '/supplies/journals/', ('journal',), 'Journals', 'Journals for Readings and Dreams',
+            'Blank and guided journals for writing down a spread, a dream or what a reader told you while it is fresh.'),
+           ('sound', '/supplies/sound/', ('bowl', 'bell'), 'Bowls & bells', 'Singing Bowls, Bells and Tingshas',
+            'Metal singing bowls with strikers, hand bells and tingshas, often rung to open or close a meditation or a session.'),
+           ('clearing', '/supplies/clearing/', ('sage', 'mist'), 'Clearing the room', 'Sage, Smudge Sprays and Cleansing Waters',
+            'Bundles to burn, plus sprays and waters for rooms where smoke is not allowed.')]
+def p_intro(x):
+    k = x['kind']
+    if k in ('bowl', 'bell'): return '<p class="pnote">Strike the rim lightly, or circle it slowly with the striker for a long tone. Want to see the rooms upstairs? Read about <a href="/healing-center/">Suite 1104</a>.</p>'
+    if k in ('sage', 'mist'): return '<p class="pnote">Burn sage with a window open and a heat-safe dish under it. Sprays are the easy choice for apartments and offices.</p>'
+    return '<p class="pnote">For your own reading table at home. To sit at ours, <a href="/reserve/">reserve a session</a>.</p>'
+def supply_pages():
+    return MS.build(SELECT, COLLECTIONS, STYLES, KINDS, SHELVES, '/supplies/', 'Reading Room Supplies: Cloths, Deck Boxes, Singing Bowls & Sage | Psychic Center of New York',
+                    'Supplies for a reading space at home: reading cloths, card stands, deck bags and boxes, journals, singing bowls, bells, sage and cleansing sprays.',
+                    'Supplies for a reading space',
+                    '<p>For setting up a reading space of your own: cloths and card stands for the table, bags and boxes for your deck, journals, '
+                    'singing bowls and bells, and sage and sprays for clearing a room.</p>', p_intro, crumb_label='Supplies',
+                    feature_kinds=('cloth', 'box', 'bowl', 'bag'))
 
 LINES = {
  'rebecca-martinez': 'Clairaudient tarot in English or Spanish, paced to whatever you bring in.',
@@ -43,7 +89,7 @@ ORDER = UP + ['lu-camy'] + DOWN + ['mychal-a-bryan']
 def shell(pg):
     nav = ''.join(f'<a href="{h}"' + (' aria-current="page"' if pg['path'].startswith(h) else '') + f'>{t}</a>' for h, t in NAV)
     return (f'<body><a class="skip" href="#main">Skip to content</a><header class="h"><div class="hi"><a class="brand" href="/"><span class="b1">Psychic Center</span><span class="b2">of New York</span></a>'
-            f'<a class="hb" href="/reserve/">Reserve a session</a></div><nav class="n" aria-label="Main">{nav}</nav></header><main id="main">{pg["body"]}</main>'
+            f'<span class="hr"><a class="hb" href="/reserve/">Reserve a session</a>{G.cart_button()}</span></div><nav class="n" aria-label="Main">{nav}</nav></header><main id="main">{pg["body"]}</main>'
             f'<footer class="f"><div class="fi"><div><p class="fb">Psychic Center of New York</p><p>Ground floor: inside Namaste Bookshop, {G.ADDR}<br>Upstairs: 80 Fifth Avenue, Suite 1104</p></div>'
             f'<div><p><a href="tel:{G.TEL}">{G.PHONE}</a><br><a href="mailto:{G.EMAIL}">{G.EMAIL}</a></p><p>Operated by Wealth Edge Ventures Inc. <a href="/about/">About</a> &middot; <a href="/privacy/">Privacy</a></p></div></div></footer></body></html>')
 
@@ -68,6 +114,7 @@ def reader_pages():
               ld=[G.person_ld(k, f'/readers/{k}/')], crumbs=[('Home', '/'), ('Readers', '/readers/'), (r['name'], f'/readers/{k}/')])
 
 def pages():
+    supply_pages()
     reader_pages()
     home = (f'<section class="hero"><p class="ov">Fifth Avenue &amp; 14th Street &middot; Manhattan</p><h1>Readings on two floors of one Manhattan building</h1>'
             f'<p class="dek">Psychic Center of New York offers tarot, psychic, mediumship and astrology readings, plus hypnotherapy, in two spaces: open reading tables on the ground floor inside Namaste Bookshop, and three private rooms upstairs in Suite 1104.</p>'
@@ -79,7 +126,9 @@ def pages():
             f'<section class="cols"><div><h2>Downstairs or upstairs?</h2><p>The ground-floor tables have the bustle of a busy shop around you. The upstairs rooms have doors that close. Each reader has a usual space, and your confirmation says where to go.</p></div>'
             f'<div><h2>What we offer</h2><p>Tarot, psychic and mediumship readings, astrology, oracle and Lenormand, hypnotherapy and short energy-cleansing sessions. <a href="/sessions/">See all sessions</a>.</p></div>'
             f'<div><h2>Hours</h2><p>' + '<br>'.join(f'{d}: {h}' for d, h in G.HOURS) + f'</p><p><a href="/visit/">Plan a visit</a></p></div></section>'
-            f'<section class="pg"><h2>Readers at the center</h2><ul class="tiles">' + ''.join(tile(k) for k in ORDER[:6]) + '</ul><p><a href="/readers/">All 18 readers</a></p></section>')
+            f'<section class="pg"><h2>Readers at the center</h2><ul class="tiles">' + ''.join(tile(k) for k in ORDER[:6]) + '</ul><p><a href="/readers/">All 18 readers</a></p></section>'
+            f'<section class="pg sup"><h2>Take the room home with you</h2><p>Set up a reading space at home: reading cloths, card stands, deck boxes and journals, plus singing bowls, bells, sage and cleansing sprays.</p>'
+            f'<p><a class="hb" href="/supplies/">Browse supplies</a></p></section>')
     G.add('/', 'Psychic Center of New York | Tarot, Psychic & Medium Readings, Union Square',
           'Psychic Center of New York: tarot, psychic, mediumship and astrology readings and hypnotherapy at Fifth Ave & 14th St, with ground-floor tables and private rooms in Suite 1104.', home,
           ld=[G.shop_ld()])
@@ -173,7 +222,8 @@ CSS = """@media(max-width:640px){.tbl thead{display:none}.tbl table,.tbl tbody,.
 .tiles{list-style:none;padding:0;display:grid;gap:10px}@media(min-width:700px){.tiles{grid-template-columns:1fr 1fr}}.tiles a{display:flex;gap:12px;background:#fff;padding:12px;text-decoration:none;color:var(--ink);border-left:4px solid var(--brass)}.tiles img{object-fit:cover;flex:none}.tiles span{display:flex;flex-direction:column}.tiles b{color:var(--navy);font-family:'Playfair Display',serif}.tiles em{font-style:normal;color:#8a6d3e;font-weight:700;font-size:.88rem}
 .rp{display:grid;gap:16px}@media(min-width:640px){.rp{grid-template-columns:200px 1fr;align-items:center}}.rp img{width:200px;height:200px;object-fit:cover;border:4px solid var(--brass)}.rp h1{margin-top:0}
 dl.svc{display:grid;grid-template-columns:auto 1fr;gap:6px 14px;background:#fff;padding:14px;border-top:3px solid var(--navy)}dl.svc dt{font-weight:700;color:var(--navy)}dl.svc dd{margin:0}
-:root{--navy:#14284b;--brass:#b08d57;--stone:#f2efe8;--ink:#1b2130}
+:root{--navy:#14284b;--brass:#b08d57;--stone:#f2efe8;--ink:#1b2130;--accent:#14284b;--onaccent:#fff;--onink:#fff;--paper:#f2efe8;--soft:#e9e3d6;--body:Karla,system-ui,sans-serif;--display:'Playfair Display',Georgia,serif;--btnr:4px;--r:6px;--line:#d8d0bf;--muted:#5a5f6b;--focus:#b08d57}
+.hr{display:flex;align-items:center;gap:14px}.cartbtn{position:relative;display:block;color:currentColor;width:28px;height:28px}.cartbtn svg{width:26px;height:26px}.cartn{position:absolute;top:-6px;right:-9px;background:var(--brass);color:#fff;border-radius:99px;font:700 .7rem sans-serif;padding:2px 6px}
 *{box-sizing:border-box}body{margin:0;background:var(--stone);color:var(--ink);font:16.5px/1.65 Karla,system-ui,sans-serif}a{color:#1f4f8f}
 h1,h2{font-family:'Playfair Display',Georgia,serif;line-height:1.15;color:var(--navy)}h1{font-size:clamp(2rem,7vw,3.1rem);font-weight:800;margin:.2em 0 .35em}
 .skip{position:absolute;left:-999px}.skip:focus{left:6px;top:6px;background:#fff;padding:6px}

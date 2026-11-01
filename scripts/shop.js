@@ -18,17 +18,29 @@
       return `<li class="pc${x.s?'':' out'}"><a class="pbox" href="${u}" tabindex="-1" aria-hidden="true">${img}${tags}</a><div class="pm"><a class="pn" href="${u}">${esc(x.n)}</a>${x.a?`<span class="pa">${esc(x.a)}</span>`:''}<span class="pp"><b>${money(x.p)}</b>${x.c?` <s aria-label="was">${money(x.c)}</s>`:''}</span></div>${btn}</li>`};
     const val=n=>{const el=$(`[data-f="${n}"]`,form);return el?(el.type==='checkbox'?(el.checked?'1':''):el.value):''};
     function apply(){
-      const k=val('k'),st=val('st'),pr=val('pr'),pb=val('pb'),s=val('s'),so=val('sort');
-      list=data.filter(x=>(!k||x.k===k)&&(!st||x.st.includes(st))&&(!pb||x.pb===pb)&&(!s||x.s)&&(!pr||(x.p>=B[pr][0]&&x.p<B[pr][1])));
+      const q=val('q').trim().toLowerCase(),k=val('k'),st=val('st'),pr=val('pr'),pb=val('pb'),s=val('s'),so=val('sort');
+      list=data.filter(x=>(!q||(x.n+' '+(x.a||'')+' '+(x.pb||'')).toLowerCase().includes(q))&&(!k||x.k===k)&&(!st||x.st.includes(st))&&(!pb||x.pb===pb)&&(!s||x.s)&&(!pr||(x.p>=B[pr][0]&&x.p<B[pr][1])));
       const by={new:(a,b)=>(b.s-a.s)||(b.d>a.d?1:b.d<a.d?-1:0),lo:(a,b)=>(b.s-a.s)||a.p-b.p,hi:(a,b)=>(b.s-a.s)||b.p-a.p,az:(a,b)=>a.n.localeCompare(b.n)}[so]||((a,b)=>a.r-b.r);
       list.sort(by);shown=0;grid.innerHTML='';page();
       const pg=$('.pager');if(pg)pg.hidden=true;
       $('[data-count]',form).textContent=`${list.length} item${list.length===1?'':'s'} match`+(list.length?'':'. Try clearing a filter.');
     }
     function page(){grid.insertAdjacentHTML('beforeend',list.slice(shown,shown+PER).map(card).join(''));shown+=PER;if(more)more.hidden=shown>=list.length}
-    form.addEventListener('change',()=>{if(data)return apply();fetch(`/data/shelf/${form.dataset.shelf}.json`).then(r=>r.json()).then(d=>{data=d;apply()}).catch(()=>{})});
+    const go=()=>{if(data)return apply();fetch(`/data/shelf/${form.dataset.shelf}.json`).then(r=>r.json()).then(d=>{data=d;apply()}).catch(()=>{})};
+    let tq;form.addEventListener('change',go);form.addEventListener('input',e=>{if(e.target.type==='search'){clearTimeout(tq);tq=setTimeout(go,180)}});
     if(more)more.addEventListener('click',page);
   }
+  /* ---------- site search ---------- */
+  const sq=$('[data-sq]'),sg=$('[data-sgrid]');
+  if(sq&&sg){let cat=null,t;const cnt=$('[data-scount]');
+    const run=()=>{const q=sq.value.trim().toLowerCase();if(history.replaceState)history.replaceState(null,'',q?'?q='+encodeURIComponent(q):location.pathname);
+      if(q.length<2){sg.innerHTML='';cnt.textContent='';return}
+      const ws=q.split(/\s+/),r=cat.filter(x=>{const s=x.t.toLowerCase();return ws.every(w=>s.includes(w))}).sort((a,b)=>(a.x-b.x)||(a.r-b.r)).slice(0,96);
+      cnt.textContent=r.length?`${r.length===96?'96+':r.length} result${r.length===1?'':'s'}`:'Nothing matched. Try fewer words.';
+      sg.innerHTML=r.map(x=>{const u=`/products/${esc(x.h)}/`;return `<li class="pc${x.x?' out':''}"><a class="pbox" href="${u}" tabindex="-1" aria-hidden="true"><img class="pi" src="${esc(x.i)}" alt="" width="300" height="300" loading="lazy" decoding="async">${x.x?'<span class="tag sold">Sold out</span>':''}</a><div class="pm"><a class="pn" href="${u}">${esc(x.t)}</a><span class="pp"><b>${money(x.p)}</b></span></div>`+(x.x?`<a class="qa ghost" href="${u}">Details</a>`:`<a class="qa" href="${u}">View</a>`)+'</li>'}).join('')};
+    const q0=new URLSearchParams(location.search).get('q');if(q0)sq.value=q0;
+    fetch('/data/catalog.json').then(r=>r.json()).then(d=>{cat=d;run()}).catch(()=>{});
+    sq.addEventListener('input',()=>{clearTimeout(t);t=setTimeout(()=>cat&&run(),150)})}
   /* ---------- product page ---------- */
   const gimg=$('#gimg');
   $$('.thumbs .th').forEach(b=>b.addEventListener('click',()=>{if(!gimg)return;gimg.src=b.dataset.src;gimg.srcset=[480,640,800,1100,1400].map(n=>b.dataset.src.replace(/width=\d+/,'width='+n)+' '+n+'w').join(', ');$$('.thumbs .th').forEach(t=>t.classList.toggle('on',t===b))}));
