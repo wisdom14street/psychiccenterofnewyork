@@ -110,13 +110,17 @@ def reader_pages():
                 + (f'<p>{first} also takes phone sessions; choose the phone option when you reserve.</p>' if r['phone'] else '')
                 + f'<p><a class="btn" href="{E(r["book"])}" rel="nofollow noopener">Reserve with {E(first)}</a></p>'
                 f'<p class="sm">Reserving opens {E(first)}\'s Square scheduling page, where you see live open times and pay to confirm. Need help? Call {G.PHONE}.</p>'
-                f'<p class="sm">Profile details come from the reader\'s own listing.</p><p><a href="/readers/">All readers</a></p></section>')
+                f'<p class="sm">Prices and availability can change; confirm them on Square before booking. <a href="{E(r["profile"])}">View {E(first)}’s Namaste Bookshop profile</a>.</p><p><a href="/readers/">All readers</a></p></section>')
         G.add(f'/readers/{k}/', f'{r["name"]} | Readers at Psychic Center of New York',
               f'{r["name"]} at Psychic Center of New York: {LINES[k]} Sessions from ${r["from"]}.', body,
               ld=[G.person_ld(k, f'/readers/{k}/')], crumbs=[('Home', '/'), ('Readers', '/readers/'), (r['name'], f'/readers/{k}/')])
 
 def pages():
     supply_pages()
+    G.add('/cart/', 'Your Cart | Psychic Center of New York', 'Review your reading-room supplies before checkout at Namaste Bookshop.',
+          '<section class="pg" data-cart-page><h1>Your cart</h1><p class="cmsg" role="status" aria-live="polite"></p>'
+          '<div data-cart-body><p>Enable JavaScript to review the cart saved in this browser.</p></div>'
+          '<p><a href="/supplies/">Browse reading-room supplies</a></p></section>', robots='noindex', sitemap=False)
     reader_pages()
     home = (f'<section class="hero"><p class="ov">Fifth Avenue &amp; 14th Street &middot; Manhattan</p><h1>Readings on two floors of one Manhattan building</h1>'
             f'<p class="dek">Psychic Center of New York offers tarot, psychic, mediumship and astrology readings, plus hypnotherapy, in two spaces: open reading tables on the ground floor inside Namaste Bookshop, and three private rooms upstairs in Suite 1104.</p>'
@@ -214,7 +218,7 @@ def pages():
           f'It is operated by Wealth Edge Ventures Inc., which also owns Namaste Bookshop.</p><p>Reader profiles are based on each reader\'s own listing. We do not post reviews or ratings.</p>'
           f'<p><a href="tel:{G.TEL}">{G.PHONE}</a> &middot; <a href="mailto:{G.EMAIL}">{G.EMAIL}</a></p></section>', crumbs=[('Home', '/'), ('About', '/about/')])
     G.add('/privacy/', 'Privacy | Psychic Center of New York', 'Analytics and booking privacy on psychiccenterofnewyork.com.',
-          '<section class="pg">' + G.privacy('psychiccenterofnewyork.com is an information and booking site. It has no sign-up and takes no payments itself.') + '</section>',
+          '<section class="pg">' + G.privacy('psychiccenterofnewyork.com offers reader information, booking links and reading-room supplies. It has no sign-up and takes no payments itself.', products=True) + '</section>',
           crumbs=[('Home', '/'), ('Privacy', '/privacy/')])
 
 NOTFOUND_DESC = 'Page not found on psychiccenterofnewyork.com.'
