@@ -1,0 +1,397 @@
+{
+  "releaseCommit": "b98af0d894369a36dda77ff3f8e4f7b61fd3fe4a",
+  "deployment": "https://github.com/wisdom14street/psychiccenterofnewyork/actions/runs/42304831404",
+  "deploymentConclusion": "success",
+  "liveAudit": {
+    "siteUrl": "sc-domain:psychiccenterofnewyork.com",
+    "contextRange": {
+      "startDate": "2026-10-07",
+      "endDate": "2026-11-03"
+    },
+    "auditedCount": 5,
+    "skipped": [],
+    "truncated": false,
+    "listKey": "pages",
+    "sortedBy": "issueCount",
+    "sortOrder": "desc",
+    "thenBy": "impressions",
+    "summary": {
+      "total_pages": 5,
+      "total_issues": 10,
+      "by_severity": {
+        "critical": 0,
+        "high": 0,
+        "medium": 5,
+        "low": 5,
+        "info": 0
+      },
+      "indexable_pages": 5,
+      "non_indexable_pages": 0
+    },
+    "pages": [
+      {
+        "url": "https://psychiccenterofnewyork.com/",
+        "finalUrl": "https://psychiccenterofnewyork.com/",
+        "statusCode": 200,
+        "redirected": false,
+        "redirectChain": [],
+        "responseTimeMs": 148,
+        "impressions": 0,
+        "clicks": 0,
+        "indexable": true,
+        "indexabilityStatus": "Indexable",
+        "title": "Psychic Center of New York | Union Square Readings",
+        "titleLength": 50,
+        "metaDescriptionLength": 144,
+        "metaKeywords": null,
+        "h1Count": 1,
+        "h3Count": 0,
+        "h4Count": 0,
+        "h5Count": 0,
+        "h6Count": 0,
+        "wordCount": 397,
+        "canonicalUrl": "https://psychiccenterofnewyork.com/",
+        "canonicalIsSelf": true,
+        "noindex": false,
+        "internalLinks": 29,
+        "externalLinks": 1,
+        "imagesMissingAlt": 6,
+        "imagesCount": 6,
+        "hasStructuredData": true,
+        "structuredDataTypes": [
+          "BookStore",
+          "GeoCoordinates",
+          "LocalBusiness",
+          "OpeningHoursSpecification",
+          "Organization",
+          "Place",
+          "PostalAddress",
+          "WebSite"
+        ],
+        "schemaIssues": [
+          {
+            "type": "Organization",
+            "level": "error",
+            "field": "logo",
+            "message": "Organization is missing required field \"logo\""
+          }
+        ],
+        "hasViewport": true,
+        "faviconPresent": true,
+        "lang": "en",
+        "hreflangCount": 0,
+        "bodyBytes": 12979,
+        "contentEncoding": "gzip",
+        "issueCount": 2,
+        "issues": [
+          {
+            "id": "images-missing-alt",
+            "category": "images",
+            "severity": "low",
+            "message": "6 of 6 images missing alt text"
+          },
+          {
+            "id": "schema-organization-missing-logo",
+            "category": "structured-data",
+            "severity": "medium",
+            "message": "Organization is missing required field \"logo\""
+          }
+        ]
+      },
+      {
+        "url": "https://psychiccenterofnewyork.com/reserve/",
+        "finalUrl": "https://psychiccenterofnewyork.com/reserve/",
+        "statusCode": 200,
+        "redirected": false,
+        "redirectChain": [],
+        "responseTimeMs": 196,
+        "impressions": 0,
+        "clicks": 0,
+        "indexable": true,
+        "indexabilityStatus": "Indexable",
+        "title": "Book a Reading | Psychic Center of New York",
+        "titleLength": 43,
+        "metaDescriptionLength": 153,
+        "metaKeywords": null,
+        "h1Count": 1,
+        "h3Count": 18,
+        "h4Count": 0,
+        "h5Count": 0,
+        "h6Count": 0,
+        "wordCount": 1031,
+        "canonicalUrl": "https://psychiccenterofnewyork.com/reserve/",
+        "canonicalIsSelf": true,
+        "noindex": false,
+        "internalLinks": 32,
+        "externalLinks": 20,
+        "imagesMissingAlt": 18,
+        "imagesCount": 18,
+        "hasStructuredData": true,
+        "structuredDataTypes": [
+          "BookStore",
+          "BreadcrumbList",
+          "GeoCoordinates",
+          "ListItem",
+          "LocalBusiness",
+          "OpeningHoursSpecification",
+          "Organization",
+          "Place",
+          "PostalAddress"
+        ],
+        "schemaIssues": [
+          {
+            "type": "Organization",
+            "level": "error",
+            "field": "logo",
+            "message": "Organization is missing required field \"logo\""
+          }
+        ],
+        "hasViewport": true,
+        "faviconPresent": true,
+        "lang": "en",
+        "hreflangCount": 0,
+        "bodyBytes": 27881,
+        "contentEncoding": "gzip",
+        "issueCount": 2,
+        "issues": [
+          {
+            "id": "images-missing-alt",
+            "category": "images",
+            "severity": "low",
+            "message": "18 of 18 images missing alt text"
+          },
+          {
+            "id": "schema-organization-missing-logo",
+            "category": "structured-data",
+            "severity": "medium",
+            "message": "Organization is missing required field \"logo\""
+          }
+        ]
+      },
+      {
+        "url": "https://psychiccenterofnewyork.com/sessions/tarot/",
+        "finalUrl": "https://psychiccenterofnewyork.com/sessions/tarot/",
+        "statusCode": 200,
+        "redirected": false,
+        "redirectChain": [],
+        "responseTimeMs": 186,
+        "impressions": 0,
+        "clicks": 0,
+        "indexable": true,
+        "indexabilityStatus": "Indexable",
+        "title": "Tarot Readings NYC | Psychic Center of New York",
+        "titleLength": 47,
+        "metaDescriptionLength": 141,
+        "metaKeywords": null,
+        "h1Count": 1,
+        "h3Count": 5,
+        "h4Count": 0,
+        "h5Count": 0,
+        "h6Count": 0,
+        "wordCount": 460,
+        "canonicalUrl": "https://psychiccenterofnewyork.com/sessions/tarot/",
+        "canonicalIsSelf": true,
+        "noindex": false,
+        "internalLinks": 20,
+        "externalLinks": 6,
+        "imagesMissingAlt": 5,
+        "imagesCount": 5,
+        "hasStructuredData": true,
+        "structuredDataTypes": [
+          "BookStore",
+          "BreadcrumbList",
+          "GeoCoordinates",
+          "ListItem",
+          "LocalBusiness",
+          "OpeningHoursSpecification",
+          "Organization",
+          "Place",
+          "PostalAddress"
+        ],
+        "schemaIssues": [
+          {
+            "type": "Organization",
+            "level": "error",
+            "field": "logo",
+            "message": "Organization is missing required field \"logo\""
+          }
+        ],
+        "hasViewport": true,
+        "faviconPresent": true,
+        "lang": "en",
+        "hreflangCount": 0,
+        "bodyBytes": 15217,
+        "contentEncoding": "gzip",
+        "issueCount": 2,
+        "issues": [
+          {
+            "id": "images-missing-alt",
+            "category": "images",
+            "severity": "low",
+            "message": "5 of 5 images missing alt text"
+          },
+          {
+            "id": "schema-organization-missing-logo",
+            "category": "structured-data",
+            "severity": "medium",
+            "message": "Organization is missing required field \"logo\""
+          }
+        ]
+      },
+      {
+        "url": "https://psychiccenterofnewyork.com/sessions/psychic/",
+        "finalUrl": "https://psychiccenterofnewyork.com/sessions/psychic/",
+        "statusCode": 200,
+        "redirected": false,
+        "redirectChain": [],
+        "responseTimeMs": 186,
+        "impressions": 0,
+        "clicks": 0,
+        "indexable": true,
+        "indexabilityStatus": "Indexable",
+        "title": "Psychic Readings NYC | Psychic Center of New York",
+        "titleLength": 49,
+        "metaDescriptionLength": 143,
+        "metaKeywords": null,
+        "h1Count": 1,
+        "h3Count": 4,
+        "h4Count": 0,
+        "h5Count": 0,
+        "h6Count": 0,
+        "wordCount": 414,
+        "canonicalUrl": "https://psychiccenterofnewyork.com/sessions/psychic/",
+        "canonicalIsSelf": true,
+        "noindex": false,
+        "internalLinks": 19,
+        "externalLinks": 5,
+        "imagesMissingAlt": 4,
+        "imagesCount": 4,
+        "hasStructuredData": true,
+        "structuredDataTypes": [
+          "BookStore",
+          "BreadcrumbList",
+          "GeoCoordinates",
+          "ListItem",
+          "LocalBusiness",
+          "OpeningHoursSpecification",
+          "Organization",
+          "Place",
+          "PostalAddress"
+        ],
+        "schemaIssues": [
+          {
+            "type": "Organization",
+            "level": "error",
+            "field": "logo",
+            "message": "Organization is missing required field \"logo\""
+          }
+        ],
+        "hasViewport": true,
+        "faviconPresent": true,
+        "lang": "en",
+        "hreflangCount": 0,
+        "bodyBytes": 14446,
+        "contentEncoding": "gzip",
+        "issueCount": 2,
+        "issues": [
+          {
+            "id": "images-missing-alt",
+            "category": "images",
+            "severity": "low",
+            "message": "4 of 4 images missing alt text"
+          },
+          {
+            "id": "schema-organization-missing-logo",
+            "category": "structured-data",
+            "severity": "medium",
+            "message": "Organization is missing required field \"logo\""
+          }
+        ]
+      },
+      {
+        "url": "https://psychiccenterofnewyork.com/sessions/astrology/",
+        "finalUrl": "https://psychiccenterofnewyork.com/sessions/astrology/",
+        "statusCode": 200,
+        "redirected": false,
+        "redirectChain": [],
+        "responseTimeMs": 193,
+        "impressions": 0,
+        "clicks": 0,
+        "indexable": true,
+        "indexabilityStatus": "Indexable",
+        "title": "Astrology Readings NYC | Psychic Center of New York",
+        "titleLength": 51,
+        "metaDescriptionLength": 145,
+        "metaKeywords": null,
+        "h1Count": 1,
+        "h3Count": 4,
+        "h4Count": 0,
+        "h5Count": 0,
+        "h6Count": 0,
+        "wordCount": 411,
+        "canonicalUrl": "https://psychiccenterofnewyork.com/sessions/astrology/",
+        "canonicalIsSelf": true,
+        "noindex": false,
+        "internalLinks": 19,
+        "externalLinks": 5,
+        "imagesMissingAlt": 4,
+        "imagesCount": 4,
+        "hasStructuredData": true,
+        "structuredDataTypes": [
+          "BookStore",
+          "BreadcrumbList",
+          "GeoCoordinates",
+          "ListItem",
+          "LocalBusiness",
+          "OpeningHoursSpecification",
+          "Organization",
+          "Place",
+          "PostalAddress"
+        ],
+        "schemaIssues": [
+          {
+            "type": "Organization",
+            "level": "error",
+            "field": "logo",
+            "message": "Organization is missing required field \"logo\""
+          }
+        ],
+        "hasViewport": true,
+        "faviconPresent": true,
+        "lang": "en",
+        "hreflangCount": 0,
+        "bodyBytes": 14520,
+        "contentEncoding": "gzip",
+        "issueCount": 2,
+        "issues": [
+          {
+            "id": "images-missing-alt",
+            "category": "images",
+            "severity": "low",
+            "message": "4 of 4 images missing alt text"
+          },
+          {
+            "id": "schema-organization-missing-logo",
+            "category": "structured-data",
+            "severity": "medium",
+            "message": "Organization is missing required field \"logo\""
+          }
+        ]
+      }
+    ],
+    "dataSource": "api"
+  },
+  "searchConsole": {
+    "property": "sc-domain:psychiccenterofnewyork.com",
+    "sitemapAccepted": true,
+    "sitemapPending": true,
+    "homepageIndexStatus": "URL is unknown to Google",
+    "baseline": {
+      "start": "2026-10-07",
+      "end": "2026-11-03",
+      "clicks": 0,
+      "impressions": 0
+    },
+    "analyticsConnected": false
+  }
+}
