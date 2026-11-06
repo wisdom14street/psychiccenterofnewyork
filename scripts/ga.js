@@ -29,6 +29,6 @@
   document.addEventListener('click',function(e){try{
     var a=e.target&&e.target.closest&&e.target.closest('a[href]');if(!a)return;var k=kind(a);if(!k)return;
     var u=new URL(a.getAttribute('href'),location.href);
-    ga(k==='booking'?'booking_click':k==='bookshop'?'bookshop_click':'contact_click',{link_type:k,measurement_stage:'click',link_url:(u.protocol==='https:'||u.protocol==='http:'?u.origin+u.pathname:u.protocol).slice(0,200),transport_type:'beacon'});
+    ga(k==='booking'?'booking_click':k==='bookshop'?'bookshop_click':'contact_click',{link_type:k,measurement_stage:'click',reader_id:a.dataset&&a.dataset.reader||undefined,cta_placement:a.dataset&&a.dataset.placement||undefined,link_url:(u.protocol==='https:'||u.protocol==='http:'?u.origin+u.pathname:u.protocol).slice(0,200),transport_type:'beacon'});
   }catch(_){}},true);
 })();

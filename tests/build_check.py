@@ -24,3 +24,12 @@ assert 'Buying something' in (root/'privacy/index.html').read_text()
 assert 'data-cart-page' in (root/'cart/index.html').read_text()
 assert 'noindex' in (root/'cart/index.html').read_text()
 print(f'Passed: {len(pages)} HTML pages, local links, {len(readers)} reader booking/profile links, {len(urls)} sitemap URLs, cart privacy and page')
+
+for slug in ('tarot','psychic','astrology'):
+    assert f'https://psychiccenterofnewyork.com/sessions/{slug}/' in urls
+reserve=(root/'reserve/index.html').read_text()
+for k,r in readers.items():
+    assert f'data-reader="{k}"' in reserve
+    assert r['book'] in reserve
+assert reserve.count('class="booking-card"') == len(readers)
+print('All readers book directly from reserve; service landing pages included in sitemap')

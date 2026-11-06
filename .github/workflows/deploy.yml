@@ -19,8 +19,15 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
       - name: Build psychiccenterofnewyork.com
         run: python3 scripts/build.py
+      - name: Validate links, sitemap, booking and checkout tracking
+        run: |
+          python3 tests/build_check.py
+          node tests/analytics.cjs
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v3
         with:
