@@ -1,0 +1,166 @@
+{
+  "date": "2026-11-06",
+  "tool": "audit_onpage_seo",
+  "summary": {
+    "total_pages": 5,
+    "total_issues": 17,
+    "by_severity": {
+      "critical": 0,
+      "high": 0,
+      "medium": 5,
+      "low": 12,
+      "info": 0
+    },
+    "indexable_pages": 5,
+    "non_indexable_pages": 0
+  },
+  "pages": [
+    {
+      "url": "https://psychiccenterofnewyork.com/",
+      "statusCode": 200,
+      "indexable": true,
+      "canonical": "https://psychiccenterofnewyork.com/",
+      "title": "Psychic Center of New York | Tarot, Psychic & Medium Readings, Union Square",
+      "issues": [
+        {
+          "id": "title-long",
+          "category": "meta",
+          "severity": "low",
+          "message": "Title is 75 chars (over ~60 may truncate)"
+        },
+        {
+          "id": "meta-long",
+          "category": "meta",
+          "severity": "low",
+          "message": "Meta description is 176 chars (over ~160 may truncate)"
+        },
+        {
+          "id": "images-missing-alt",
+          "category": "images",
+          "severity": "low",
+          "message": "6 of 6 images missing alt text"
+        },
+        {
+          "id": "schema-organization-missing-logo",
+          "category": "structured-data",
+          "severity": "medium",
+          "message": "Organization is missing required field \"logo\""
+        }
+      ]
+    },
+    {
+      "url": "https://psychiccenterofnewyork.com/sessions/astrology/",
+      "statusCode": 200,
+      "indexable": true,
+      "canonical": "https://psychiccenterofnewyork.com/sessions/astrology/",
+      "title": "Astrology Readings in Union Square, NYC | Psychic Center of New York",
+      "issues": [
+        {
+          "id": "title-long",
+          "category": "meta",
+          "severity": "low",
+          "message": "Title is 68 chars (over ~60 may truncate)"
+        },
+        {
+          "id": "meta-long",
+          "category": "meta",
+          "severity": "low",
+          "message": "Meta description is 175 chars (over ~160 may truncate)"
+        },
+        {
+          "id": "images-missing-alt",
+          "category": "images",
+          "severity": "low",
+          "message": "4 of 4 images missing alt text"
+        },
+        {
+          "id": "schema-organization-missing-logo",
+          "category": "structured-data",
+          "severity": "medium",
+          "message": "Organization is missing required field \"logo\""
+        }
+      ]
+    },
+    {
+      "url": "https://psychiccenterofnewyork.com/reserve/",
+      "statusCode": 200,
+      "indexable": true,
+      "canonical": "https://psychiccenterofnewyork.com/reserve/",
+      "title": "Book Tarot, Psychic & Astrology Readings in NYC | Psychic Center of New York",
+      "issues": [
+        {
+          "id": "title-long",
+          "category": "meta",
+          "severity": "low",
+          "message": "Title is 76 chars (over ~60 may truncate)"
+        },
+        {
+          "id": "images-missing-alt",
+          "category": "images",
+          "severity": "low",
+          "message": "18 of 18 images missing alt text"
+        },
+        {
+          "id": "schema-organization-missing-logo",
+          "category": "structured-data",
+          "severity": "medium",
+          "message": "Organization is missing required field \"logo\""
+        }
+      ]
+    },
+    {
+      "url": "https://psychiccenterofnewyork.com/sessions/tarot/",
+      "statusCode": 200,
+      "indexable": true,
+      "canonical": "https://psychiccenterofnewyork.com/sessions/tarot/",
+      "title": "Tarot Readings in Union Square, NYC | Psychic Center of New York",
+      "issues": [
+        {
+          "id": "title-long",
+          "category": "meta",
+          "severity": "low",
+          "message": "Title is 64 chars (over ~60 may truncate)"
+        },
+        {
+          "id": "images-missing-alt",
+          "category": "images",
+          "severity": "low",
+          "message": "5 of 5 images missing alt text"
+        },
+        {
+          "id": "schema-organization-missing-logo",
+          "category": "structured-data",
+          "severity": "medium",
+          "message": "Organization is missing required field \"logo\""
+        }
+      ]
+    },
+    {
+      "url": "https://psychiccenterofnewyork.com/sessions/psychic/",
+      "statusCode": 200,
+      "indexable": true,
+      "canonical": "https://psychiccenterofnewyork.com/sessions/psychic/",
+      "title": "Psychic Readings in Union Square, NYC | Psychic Center of New York",
+      "issues": [
+        {
+          "id": "title-long",
+          "category": "meta",
+          "severity": "low",
+          "message": "Title is 66 chars (over ~60 may truncate)"
+        },
+        {
+          "id": "images-missing-alt",
+          "category": "images",
+          "severity": "low",
+          "message": "4 of 4 images missing alt text"
+        },
+        {
+          "id": "schema-organization-missing-logo",
+          "category": "structured-data",
+          "severity": "medium",
+          "message": "Organization is missing required field \"logo\""
+        }
+      ]
+    }
+  ]
+}
