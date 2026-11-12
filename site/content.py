@@ -3,6 +3,7 @@ Namaste Bookshop, private rooms upstairs in Suite 1104, its readers, sessions, s
 import json, os
 import engine as G
 E = G.E
+NB_BOOK = G.BOOK + '?utm_source=' + G.DOMAIN + '&utm_medium=referral&utm_campaign=sister_site'  # Namaste Bookshop booking page, tagged per sister site
 BUSINESS_TYPE = 'LocalBusiness'
 THEME_COLOR = '#14284b'
 FONTS = 'https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;800&family=Karla:wght@400;600;700&display=swap'
@@ -122,7 +123,7 @@ def discovery_pages():
     for slug, title, intro, heading, text, prep_heading, prep in guides:
         keys = next(g[2] for g in BOOKING_GROUPS if g[0] == slug)
         body = (f'<section class="pg"><p class="ov">Fifth Avenue &amp; 14th Street · Manhattan</p><h1>{title}</h1><p class="dek">{intro}</p>'
-                f'<p><a class="btn" href="#choose-reader">Compare readers &amp; availability</a> <a class="lnk" href="tel:{G.TEL}">Call for help</a></p>'
+                f'<p><a class="btn" href="{E(NB_BOOK)}">Book a reading</a> <a class="btn" href="#choose-reader">Compare readers &amp; availability</a> <a class="lnk" href="tel:{G.TEL}">Call for help</a></p>'
                 f'<h2>{heading}</h2><p>{text}</p><h2>{prep_heading}</h2><p>{prep}</p>'
                 '<h2 id="choose-reader">Choose a reader</h2><p>Listed prices may change. Square shows the available services, final prices and open times before you confirm.</p>'
                 + booking_grid(keys, 'service') + '<h2>Plan your visit</h2><p>Check your booking confirmation for the location. <a href="/visit/">Directions and visiting information</a>.</p>'
@@ -168,7 +169,7 @@ def pages():
     discovery_pages()
     home = (f'<section class="hero"><p class="ov">Fifth Avenue &amp; 14th Street &middot; Manhattan</p><h1>Find your reader in Union Square</h1>'
             f'<p class="dek">Psychic Center of New York offers tarot, psychic, mediumship and astrology readings, plus hypnotherapy, in two spaces: open reading tables on the ground floor inside Namaste Bookshop, and three private rooms upstairs in Suite 1104.</p>'
-            f'<p><a class="btn" href="/reserve/">Compare readers &amp; check availability</a> <a class="lnk" href="tel:{G.TEL}">Call for help choosing</a></p><p class="sm">Sessions from $35 · Book directly on Square · Check final prices and availability before confirming.</p><p><a href="/sessions/tarot/">Tarot readings</a> · <a href="/sessions/psychic/">Psychic readings</a> · <a href="/sessions/astrology/">Astrology readings</a></p></section>'
+            f'<p><a class="btn" href="{E(NB_BOOK)}">Book a reading</a> <a class="btn" href="/reserve/">Compare readers &amp; check availability</a> <a class="lnk" href="tel:{G.TEL}">Call for help choosing</a></p><p class="sm">Sessions from $35 · Book directly on Square · Check final prices and availability before confirming.</p><p><a href="/sessions/tarot/">Tarot readings</a> · <a href="/sessions/psychic/">Psychic readings</a> · <a href="/sessions/astrology/">Astrology readings</a></p></section>'
             f'<section class="board" aria-label="Building directory"><h2>Directory</h2><table><tbody>'
             f'<tr><th>11</th><td><b>Suite 1104</b> &middot; private rooms<br><span>Windowed room &middot; second room &middot; third room. Readings, mediumship, hypnotherapy.</span></td><td><a href="/healing-center/">Details</a></td></tr>'
             f'<tr><th>G</th><td><b>Ground-floor tables</b> &middot; inside Namaste Bookshop<br><span>Main table at the back of the sales floor &middot; window table at the front.</span></td><td><a href="/bookshop-floor/">Details</a></td></tr>'
@@ -193,7 +194,7 @@ def pages():
           '<p class="sm">Prices may change. No appointment is reserved by clicking a link. Your booking confirmation provides the final session details and location.</p>'
           '<nav class="booking-jumps" aria-label="Session types">' + ''.join(f'<a href="#{slug}">{label}</a>' for slug,label,_ in BOOKING_GROUPS) + '</nav>'
           + ''.join(f'<section id="{slug}"><h2>{label}</h2>' + booking_grid(keys) + '</section>' for slug,label,keys in BOOKING_GROUPS)
-          + f'<h2>Need help choosing?</h2><p><a class="btn" href="tel:{G.TEL}">Call {G.PHONE}</a></p><p><a href="{G.BOOK}">Browse the current Namaste Bookshop booking directory</a> for additional readers and services.</p>'
+          + f'<h2>Need help choosing?</h2><p><a class="btn" href="tel:{G.TEL}">Call {G.PHONE}</a></p><p><a href="{E(NB_BOOK)}">Browse the current Namaste Bookshop booking directory</a> for additional readers and services.</p>'
           '<h2>Before you book</h2><p>Review the service, price, location and cancellation terms on Square. For in-person sessions, follow your confirmation: the ground-floor tables are inside Namaste Bookshop, and the upstairs rooms are in Suite 1104.</p><p><a href="/visit/">Plan your visit</a></p></section>')
     G.add('/reserve/', 'Book a Reading | Psychic Center of New York',
           'Compare 18 readers, specialties and listed prices in Union Square. Open each reader’s Square calendar to check available appointments and book a session.', rs,
@@ -226,7 +227,7 @@ def pages():
     sv = ('<section class="pg"><h1>Sessions at the center</h1><p class="dek">Each reader sets their own prices, and every profile lists them. The prices below are typical starting points.</p>'
           '<div class="tbl"><table><thead><tr><th>Session</th><th>Length</th><th>Price</th><th>Readers</th></tr></thead><tbody>'
           + ''.join(f'<tr><td data-l="Session"><b>{a}</b></td><td data-l="Length"><span>{b}</span></td><td data-l="Price"><span>{c}</span></td><td data-l="Readers"><span>{names(d)}</span></td></tr>' for a, b, c, d in svc) + '</tbody></table></div>'
-          f'<h2>Remote sessions</h2><p>Some readers take phone sessions: {names([k for k in ORDER if R[k]["phone"]])}. Choose a phone session when you book.</p><p><a class="btn" href="/reserve/">Reserve a session</a></p></section>')
+          f'<h2>Remote sessions</h2><p>Some readers take phone sessions: {names([k for k in ORDER if R[k]["phone"]])}. Choose a phone session when you book.</p><p><a class="btn" href="{E(NB_BOOK)}">Book a reading</a> <a class="btn" href="/reserve/">Reserve a session</a></p></section>')
     G.add('/sessions/', 'Readings, Astrology & Hypnotherapy Sessions | Psychic Center of New York',
           'Sessions at Psychic Center of New York near Union Square: tarot, psychic, mediumship, astrology, oracle, hypnotherapy and energy cleansing, with typical lengths and prices.', sv,
           crumbs=[('Home', '/'), ('Sessions', '/sessions/')])
