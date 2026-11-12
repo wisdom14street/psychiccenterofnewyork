@@ -4,6 +4,9 @@ import json, os
 import engine as G
 E = G.E
 NB_BOOK = G.BOOK + '?utm_source=' + G.DOMAIN + '&utm_medium=referral&utm_campaign=sister_site'  # Namaste Bookshop booking page, tagged per sister site
+
+def NB(path):  # Namaste Bookshop guide page, tagged per sister site
+    return 'https://namastebookshop.com/pages/' + path + '?utm_source=' + G.DOMAIN + '&utm_medium=referral&utm_campaign=sister_site'
 BUSINESS_TYPE = 'LocalBusiness'
 THEME_COLOR = '#14284b'
 FONTS = 'https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;800&family=Karla:wght@400;600;700&display=swap'
@@ -120,11 +123,14 @@ def discovery_pages():
          'Compare astrology specialties', 'Alexander offers Western and Vedic astrology, Priya specializes in astrology and tarot, and Dainichi combines Vedic astrology with other reading practices. Mychal offers longer astrology sessions remotely.',
          'Preparing for your appointment', 'Read the selected service’s instructions on Square before confirming. Ask the reader whether birth date, time and place are needed for your chosen session. Availability, session length and price depend on the service.')
     ]
+    GUIDE = {'astrology': f'<p>More detail on natal, transit and Vedic sessions: <a href="{E(NB("astrology-birth-chart-reading-nyc"))}">astrology and birth chart readings at Namaste Bookshop</a>.</p>',
+             'psychic': f'<p>Looking for mediumship specifically? See <a href="{E(NB("medium-reading-nyc"))}">mediumship readings at Namaste Bookshop</a>.</p>',
+             'tarot': f'<p>First time? <a href="{E(NB("first-tarot-reading-what-to-expect"))}">What to expect at a first tarot reading</a>, or find <a href="{E(NB("evening-tarot-reading-nyc"))}">evening reading times</a>.</p>'}
     for slug, title, intro, heading, text, prep_heading, prep in guides:
         keys = next(g[2] for g in BOOKING_GROUPS if g[0] == slug)
         body = (f'<section class="pg"><p class="ov">Fifth Avenue &amp; 14th Street · Manhattan</p><h1>{title}</h1><p class="dek">{intro}</p>'
                 f'<p><a class="btn" href="{E(NB_BOOK)}">Book a reading</a> <a class="btn" href="#choose-reader">Compare readers &amp; availability</a> <a class="lnk" href="tel:{G.TEL}">Call for help</a></p>'
-                f'<h2>{heading}</h2><p>{text}</p><h2>{prep_heading}</h2><p>{prep}</p>'
+                f'<h2>{heading}</h2><p>{text}</p>' + GUIDE.get(slug, '') + f'<h2>{prep_heading}</h2><p>{prep}</p>'
                 '<h2 id="choose-reader">Choose a reader</h2><p>Listed prices may change. Square shows the available services, final prices and open times before you confirm.</p>'
                 + booking_grid(keys, 'service') + '<h2>Plan your visit</h2><p>Check your booking confirmation for the location. <a href="/visit/">Directions and visiting information</a>.</p>'
                 '<p>Readings are for personal reflection; outcomes are not guaranteed.</p><p><a href="/reserve/">Explore all session types</a></p></section>')
